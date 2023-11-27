@@ -10,6 +10,7 @@ import { IoGitPullRequestSharp } from "react-icons/io5";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
 import { GoPackageDependents } from "react-icons/go";
+import { useAuth } from "../../store/useAuth";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const Header = () => {
     e.preventDefault();
     navigate(path);
   }
+
+  const { user } = useAuth();
 
   return (
     <Navbar key="xxl" expand="xxl" className="mb-3 bg-primary">
@@ -45,60 +48,74 @@ const Header = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <NavDropdown
-                title="Gerenciar"
-                id="offcanvasNavbarDropdown-expand-xxl"
-                menuVariant="dark"
-              >
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/admin/users")}
+              {user?.admin && (
+                <NavDropdown
+                  title="Gerenciar"
+                  id="offcanvasNavbarDropdown-expand-xxl"
+                  menuVariant="dark"
                 >
-                  Usuários <FaUsers />
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/admin/requests")}
+                  <NavDropdown.Item
+                    onClick={(e) => handleNavigate(e, "/admin/users")}
+                  >
+                    Usuários <FaUsers />
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={(e) => handleNavigate(e, "/admin/requests")}
+                  >
+                    Solicitações <IoGitPullRequestSharp />
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+              {user?.almox && (
+                <NavDropdown
+                  title="Almoxarifado"
+                  id="offcanvasNavbarDropdown-expand-xxl"
+                  menuVariant="dark"
                 >
-                  Solicitações <IoGitPullRequestSharp />
-                </NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown
-                title="Almoxarifado"
-                id="offcanvasNavbarDropdown-expand-xxl"
-                menuVariant="dark"
-              >
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/almox/dashboard")}
+                  <NavDropdown.Item
+                    onClick={(e) => handleNavigate(e, "/almox/dashboard")}
+                  >
+                    Dashboard <MdOutlineDashboardCustomize />
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={(e) =>
+                      handleNavigate(e, "/almox/canceledRequests")
+                    }
+                  >
+                    Solicitações Canceladas <TiCancel />
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+              {user?.requester && (
+                <NavDropdown
+                  title="Solicitações"
+                  id="offcanvasNavbarDropdown-expand-xxl"
+                  menuVariant="dark"
                 >
-                  Dashboard <MdOutlineDashboardCustomize />
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/almox/canceledRequests")}
-                >
-                  Solicitações Canceladas <TiCancel />
-                </NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown
-                title="Solicitações"
-                id="offcanvasNavbarDropdown-expand-xxl"
-                menuVariant="dark"
-              >
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/solicitacao/nova")}
-                >
-                  Nova Solicitação <FaPlusCircle />
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  onClick={(e) => handleNavigate(e, "/solicitacao/acompanhar")}
-                >
-                  Acompanhar Solicitações <GoPackageDependents />
-                </NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link onClick={(e) => handleNavigate(e, "/login")}>
-                Entrar <RiShieldUserFill />
-              </Nav.Link>
-              <Nav.Link onClick={(e) => handleNavigate(e, "/logout")}>
-                Sair <RiLogoutBoxRLine />
-              </Nav.Link>
+                  <NavDropdown.Item
+                    onClick={(e) => handleNavigate(e, "/solicitacao/nova")}
+                  >
+                    Nova Solicitação <FaPlusCircle />
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={(e) =>
+                      handleNavigate(e, "/solicitacao/acompanhar")
+                    }
+                  >
+                    Acompanhar Solicitações <GoPackageDependents />
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+              {!user && (
+                <Nav.Link onClick={(e) => handleNavigate(e, "/login")}>
+                  Autenticar-se <RiShieldUserFill />
+                </Nav.Link>
+              )}
+              {user && (
+                <Nav.Link onClick={(e) => handleNavigate(e, "/logout")}>
+                  Sair <RiLogoutBoxRLine />
+                </Nav.Link>
+              )}
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
