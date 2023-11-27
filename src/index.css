@@ -11,6 +11,10 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.nav-link {
+  color: #fff !important;
+}
+
 .app {
   min-height: 100dvh;
   max-width: 100dvw;
