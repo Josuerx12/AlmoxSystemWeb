@@ -29,9 +29,9 @@ const Header = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-xxl" />
         <Navbar.Offcanvas
-          id={`offcanvasNavbar-expand-"xxl"`}
+          id="offcanvasNavbar-expand-xxl"
           aria-labelledby="offcanvasNavbarLabel-expand-xxl"
-          placement="end"
+          placement="start"
           className="bg-primary"
         >
           <Offcanvas.Header closeButton>
