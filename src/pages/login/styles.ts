@@ -1,14 +1,35 @@
 import styled from "styled-components";
 
+export const Container = styled.section`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+`;
+
+export const ErrorMessage = styled.p`
+  font-size: 0.8rem;
+  color: #d22;
+`;
+
+export const Title = styled.h2`
+  text-align: center;
+  margin: 0 1rem;
+`;
+
 export const LoginPage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  width: 100%;
 `;
 
 export const LoginForm = styled.form`
-  width: 300px;
+  margin: 0 1rem;
+  max-width: 600px;
+  width: 100%;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;

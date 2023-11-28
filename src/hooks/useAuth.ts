@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { api } from "../config/api";
-import Cookies from "js-cookies";
+import Cookies from "js-cookie";
 
 type Credentials = {
-  email: string;
+  login: string;
   password: string;
 };
 
@@ -22,43 +22,40 @@ type User = {
 
 type State = {
   user: User | null;
-  token: string | null;
+  errors: string | string[] | null;
 };
 
 type Actions = {
   login: (credentials: Credentials) => Promise<void>;
-  getUser: (token: string) => Promise<void>;
-  loggedUser: (token: string) => void;
+  getUser: () => Promise<void>;
   logoutUser: () => void;
 };
 
 export const useAuth = create<State & Actions>((set) => ({
   user: null,
-  token: null,
+  errors: null,
   login: async (credentials: Credentials) => {
     try {
-      const res = await api().post("/auth/login", { credentials });
+      const res = await api().post("/auth/login", credentials);
       const token = await res.data.token;
 
       Cookies.set("refreshToken", token, { expires: 1 });
-
-      set(() => ({ token: token }));
-    } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      set(() => ({ errors: error.response.data.error }));
     }
   },
-  loggedUser: (token: string) => {
-    set(() => ({ token: token }));
-  },
   logoutUser: () => {
-    set(() => ({ user: null, token: null }));
+    Cookies.remove("refreshToken");
+    set(() => ({ user: null }));
   },
-  getUser: async (token: string) => {
+  getUser: async () => {
+    const token = Cookies.get("refreshToken");
     try {
       const res = await api(token).get("/auth/user");
       const user = await res.data;
 
-      set(() => ({ user: user }));
+      set(() => ({ user: user, errors: null }));
     } catch (error) {
       console.error(error);
     }

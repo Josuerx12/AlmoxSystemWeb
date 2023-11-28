@@ -10,7 +10,7 @@ import { IoGitPullRequestSharp } from "react-icons/io5";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
 import { GoPackageDependents } from "react-icons/go";
-import { useAuth } from "../../store/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Header = () => {
     navigate(path);
   }
 
-  const { user } = useAuth();
+  const { user, logoutUser } = useAuth();
 
   return (
     <Navbar key="xxl" expand="xxl" className="mb-3 bg-primary">
@@ -108,11 +108,11 @@ const Header = () => {
               )}
               {!user && (
                 <Nav.Link onClick={(e) => handleNavigate(e, "/login")}>
-                  Autenticar-se <RiShieldUserFill />
+                  Autentique-se <RiShieldUserFill />
                 </Nav.Link>
               )}
               {user && (
-                <Nav.Link onClick={(e) => handleNavigate(e, "/logout")}>
+                <Nav.Link onClick={logoutUser}>
                   Sair <RiLogoutBoxRLine />
                 </Nav.Link>
               )}
