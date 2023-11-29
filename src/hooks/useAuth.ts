@@ -19,10 +19,14 @@ type User = {
   updatedAt: string;
   phone: string;
 };
+type Error = {
+  login: { msg: string; path: string };
+  password: { msg: string; path: string };
+};
 
 type State = {
   user: User | null;
-  errors: string | string[] | null;
+  errors: string | Error | null;
 };
 
 type Actions = {
@@ -42,7 +46,7 @@ export const useAuth = create<State & Actions>((set) => ({
       Cookies.set("refreshToken", token, { expires: 1 });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      set(() => ({ errors: error.response.data.error }));
+      set(() => ({ errors: error.response.data.errors }));
     }
   },
   logoutUser: () => {

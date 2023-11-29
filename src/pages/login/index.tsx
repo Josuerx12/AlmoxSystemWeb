@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
+  AuthErrorMessage,
   Button,
   Container,
   ErrorMessage,
@@ -11,6 +12,11 @@ import {
   Title,
 } from "./styles";
 import { useAuth } from "../../hooks/useAuth";
+type Error = {
+  login: { msg: string; path: string };
+  password: { msg: string; path: string };
+};
+
 const Login = () => {
   const { login, getUser, errors } = useAuth();
   const [credentials, setCredentials] = useState({ login: "", password: "" });
@@ -39,7 +45,9 @@ const Login = () => {
               value={credentials.login}
               onChange={handleInputChange}
             />
-            {errors?.login && <ErrorMessage>{errors.login.msg}</ErrorMessage>}
+            {(errors as Error)?.login && (
+              <ErrorMessage>{(errors as Error).login.msg}</ErrorMessage>
+            )}
           </FormGroup>
           <FormGroup>
             <Label>Senha:</Label>
@@ -49,10 +57,17 @@ const Login = () => {
               value={credentials.password}
               onChange={handleInputChange}
             />
-            {errors?.password && (
-              <ErrorMessage>{errors.password.msg}</ErrorMessage>
+            {(errors as Error)?.password && (
+              <ErrorMessage>{(errors as Error).password.msg}</ErrorMessage>
             )}
           </FormGroup>
+          {!(errors as Error)?.password &&
+            !(errors as Error)?.login &&
+            errors && (
+              <AuthErrorMessage>
+                <b>Error</b>: {errors.toString()}
+              </AuthErrorMessage>
+            )}
           <Button type="submit">Entrar</Button>
         </LoginForm>
       </LoginPage>

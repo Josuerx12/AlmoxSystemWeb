@@ -14,6 +14,15 @@ export const ErrorMessage = styled.p`
   color: #d22;
 `;
 
+export const AuthErrorMessage = styled.p`
+  width: 100%;
+  padding: 0.625rem;
+  border-radius: 5px;
+  background-color: #d223;
+  font-size: 0.8rem;
+  color: #d21;
+`;
+
 export const Title = styled.h2`
   text-align: center;
   margin: 0 1rem;
