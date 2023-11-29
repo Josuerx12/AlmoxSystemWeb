@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import { useAuth } from "./hooks/useAuth";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import UsersAdminPanel from "./pages/admin/users";
 
 const App = () => {
   const { user, getUser } = useAuth();
@@ -18,6 +19,7 @@ const App = () => {
     <div className="app">
       <Header />
       <Routes>
+        <Route path="/admin/users" element={<UsersAdminPanel />} />
         <Route
           path="/"
           element={

@@ -47,12 +47,13 @@ const Header = () => {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
+            <Nav className="justify-content-start pe-3">
               {user?.admin && (
                 <NavDropdown
                   title="Gerenciar"
                   id="offcanvasNavbarDropdown-expand-xxl"
                   menuVariant="dark"
+                  drop="down-centered"
                 >
                   <NavDropdown.Item
                     onClick={(e) => handleNavigate(e, "/admin/users")}
@@ -71,6 +72,7 @@ const Header = () => {
                   title="Almoxarifado"
                   id="offcanvasNavbarDropdown-expand-xxl"
                   menuVariant="dark"
+                  drop="down-centered"
                 >
                   <NavDropdown.Item
                     onClick={(e) => handleNavigate(e, "/almox/dashboard")}
@@ -91,6 +93,7 @@ const Header = () => {
                   title="Solicitações"
                   id="offcanvasNavbarDropdown-expand-xxl"
                   menuVariant="dark"
+                  drop="down-centered"
                 >
                   <NavDropdown.Item
                     onClick={(e) => handleNavigate(e, "/solicitacao/nova")}
@@ -106,6 +109,8 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
+            </Nav>
+            <div className="d-flex align-items-center justify-content-xl-end justify-content-lg-start w-100 ">
               {!user && (
                 <Nav.Link onClick={(e) => handleNavigate(e, "/login")}>
                   Autentique-se <RiShieldUserFill />
@@ -116,7 +121,7 @@ const Header = () => {
                   Sair <RiLogoutBoxRLine />
                 </Nav.Link>
               )}
-            </Nav>
+            </div>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
