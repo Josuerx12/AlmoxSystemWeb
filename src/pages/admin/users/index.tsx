@@ -28,7 +28,7 @@ const UsersAdminPanel = () => {
         show={showNewUserModal}
         handleClose={() => setShowNewUserModal((prev) => !prev)}
       />
-      <h3>Painel administrativo</h3>
+      <h3>Painel Administrativo - Usuários</h3>
       <ContainerOfExternalButtonCommands>
         <Button
           onClick={() => setShowFilters((prev) => !prev)}
