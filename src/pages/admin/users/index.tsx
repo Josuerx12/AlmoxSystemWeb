@@ -11,7 +11,7 @@ import UsersFilter from "../../../components/filters/usersFilter";
 import UsersTable from "../../../components/tables/usersTable";
 import { useQuery } from "react-query";
 import { useAdminCommands } from "../../../hooks/useAdminCommands";
-import NewUserModal from "../../../components/modals/newUserModal";
+import NewUserModal from "../../../components/modals/user/new";
 const UsersAdminPanel = () => {
   const { fetchUser } = useAdminCommands();
   const [showFilters, setShowFilters] = useState(false);
