@@ -95,9 +95,7 @@ const Header = () => {
                   menuVariant="dark"
                   drop="down-centered"
                 >
-                  <NavDropdown.Item
-                    onClick={(e) => handleNavigate(e, "/solicitacao/nova")}
-                  >
+                  <NavDropdown.Item>
                     Nova Solicitação <FaPlusCircle />
                   </NavDropdown.Item>
                   <NavDropdown.Item

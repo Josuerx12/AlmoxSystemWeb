@@ -7,7 +7,7 @@ type Credentials = {
   password: string;
 };
 
-type User = {
+export type User = {
   _id: string;
   name: string;
   login: string;

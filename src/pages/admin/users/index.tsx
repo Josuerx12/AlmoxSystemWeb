@@ -12,11 +12,13 @@ import UsersTable from "../../../components/tables/usersTable";
 import { useQuery } from "react-query";
 import { useAdminCommands } from "../../../hooks/useAdminCommands";
 import NewUserModal from "../../../components/modals/user/new";
+import { Table } from "react-bootstrap";
+import { User } from "../../../interfaces/user";
 const UsersAdminPanel = () => {
   const { fetchUser } = useAdminCommands();
   const [showFilters, setShowFilters] = useState(false);
   const [showNewUserModal, setShowNewUserModal] = useState(false);
-  const { data, isLoading } = useQuery(["users"], fetchUser);
+  const { data, isLoading } = useQuery<User[]>(["users"], fetchUser);
 
   return (
     <Container>
@@ -43,7 +45,26 @@ const UsersAdminPanel = () => {
           Novo Usuário <FaUserPlus />
         </Button>
       </ContainerOfExternalButtonCommands>
-      {isLoading ? <SkeletonRow /> : <UsersTable users={data} />}
+      {isLoading ? (
+        <SkeletonRow />
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr className="text-center">
+              <th>Nome</th>
+              <th>Login</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Gerenciar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.map((user) => (
+              <UsersTable user={user} key={user._id} />
+            ))}
+          </tbody>
+        </Table>
+      )}
     </Container>
   );
 };
