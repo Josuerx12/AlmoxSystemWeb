@@ -6,6 +6,7 @@ import { useAuth } from "./hooks/useAuth";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import UsersAdminPanel from "./pages/admin/users";
+import { RequestsPage } from "./pages/requests";
 
 const App = () => {
   const { user, getUser } = useAuth();
@@ -30,6 +31,7 @@ const App = () => {
             )
           }
         />
+        <Route path="/requests" element={<RequestsPage />} />
         <Route
           path="/login"
           element={user ? <Navigate to="/solicitacao/acompanhar" /> : <Login />}

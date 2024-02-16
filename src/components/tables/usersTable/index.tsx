@@ -19,11 +19,11 @@ const UsersTable = ({ user }: { user: User }) => {
         user={user}
       />
       <tr className="text-center" key={user._id}>
-        <td>{user.name}</td>
-        <td>{user.login}</td>
-        <td>{user.email}</td>
-        <td>{user.phone}</td>
-        <td>
+        <td style={{ lineHeight: "2" }}>{user.name}</td>
+        <td style={{ lineHeight: "2" }}>{user.login}</td>
+        <td style={{ lineHeight: "2" }}>{user.email}</td>
+        <td style={{ lineHeight: "2" }}>{user.phone}</td>
+        <td className="d-flex align-items-center justify-content-center">
           <Button
             onClick={handleCloseModal}
             variant="dark"

@@ -1,7 +1,9 @@
-import { Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { User } from "../../../../interfaces/user";
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { FaRegTrashAlt, FaPen, FaSave } from "react-icons/fa";
+import { TiCancel } from "react-icons/ti";
 
 type Props = {
   user: User;
@@ -10,6 +12,9 @@ type Props = {
 };
 
 const UserDetails = ({ user, show, handleClose }: Props) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       name: user.name,
@@ -24,6 +29,24 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
     },
   });
 
+  function resetData() {
+    setValue("name", user.name);
+    setValue("login", user.login);
+    setValue("email", user.email);
+    setValue("phone", user.phone);
+    setValue("password", "");
+    setValue("confirmPassword", "");
+    setValue("almox", user.almox);
+    setValue("almox", user.almox);
+    setValue("admin", user.admin);
+    setValue("requester", user.requester);
+  }
+
+  function cancellEditing() {
+    resetData();
+    setIsEditing((prev) => !prev);
+  }
+
   const ref = useRef<HTMLFormElement | null>(null);
 
   return (
@@ -35,6 +58,23 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
       </Modal.Header>
 
       <Modal.Body>
+        {!isEditing && (
+          <div className="d-flex gap-2 justify-content-end">
+            <Button
+              variant="outline-primary"
+              className="d-flex gap-1 align-items-center justify-content-center"
+              onClick={() => setIsEditing((prev) => !prev)}
+            >
+              <FaPen /> Editar
+            </Button>
+            <Button
+              variant="outline-danger"
+              className="d-flex gap-1 align-items-center justify-content-center"
+            >
+              <FaRegTrashAlt /> Deletar
+            </Button>
+          </div>
+        )}
         <Form
           ref={ref}
           onSubmit={(e: never) => handleSubmit(e)}
@@ -114,7 +154,24 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
         </Form>
       </Modal.Body>
 
-      <Modal.Footer></Modal.Footer>
+      {isEditing && (
+        <Modal.Footer>
+          <Button
+            variant="outline-secondary"
+            className="d-flex gap-1 align-items-center justify-content-center"
+            onClick={cancellEditing}
+          >
+            <TiCancel style={{ fontSize: "1.3rem" }} />
+            Cancelar
+          </Button>
+          <Button
+            variant="outline-primary"
+            className="d-flex gap-1 align-items-center justify-content-center"
+          >
+            <FaSave /> Salvar Alterações
+          </Button>
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };
