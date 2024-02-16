@@ -10,13 +10,22 @@ import { IoGitPullRequestSharp } from "react-icons/io5";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
 import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import NewRequest from "../modals/requests/new";
+import { useQuery } from "react-query";
+import { useRequests } from "../../hooks/useRequests";
+import { RequestType } from "../cards/newRequests";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { fetch } = useRequests();
+  const requests = useQuery<RequestType[]>(["userRequests"], fetch);
 
   const [isRequesting, setIsRequesting] = useState(false);
+  const newReq = useMemo(
+    () => requests.data?.filter((r) => r.status === "Aguardando Separação"),
+    [requests.data]
+  );
 
   function handleNavigate(e: React.FormEvent, path: string) {
     e.preventDefault();
@@ -107,7 +116,7 @@ const Header = () => {
                     <Nav.Link
                       onClick={(e) => handleNavigate(e, "/requests")}
                       className="requestsNotify"
-                      data-set="20"
+                      data-set={newReq ? newReq.length : 0}
                     >
                       Solicitações
                     </Nav.Link>

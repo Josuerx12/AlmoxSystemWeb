@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NewReqCredentials } from "../components/modals/requests/new";
 import { api } from "../config/api";
 import Cookies from "js-cookie";
 
@@ -17,5 +18,14 @@ export const useRequests = () => {
     }
   }
 
-  return { fetch };
+  async function newReq(data: NewReqCredentials) {
+    try {
+      const res = await api(token).post("/requests/new", data);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  return { fetch, newReq };
 };
