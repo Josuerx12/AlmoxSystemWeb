@@ -47,8 +47,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
     }
   );
 
-  async function onSubmit(data: any, e: FormEvent) {
-    e.preventDefault();
+  async function onSubmit(data: any) {
     await mutation.mutateAsync(data);
   }
 
@@ -63,7 +62,10 @@ const NewRequest = ({ show, handleClose }: Props) => {
       <Modal.Body>
         <Form
           ref={ref}
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(onSubmit)();
+          }}
           className="d-flex flex-column gap-3"
         >
           <Form.Group>

@@ -7,32 +7,33 @@ import { RiShieldUserFill, RiLogoutBoxRLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaUsers } from "react-icons/fa";
 import { IoGitPullRequestSharp } from "react-icons/io5";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
-import { TiCancel } from "react-icons/ti";
 import { useAuth } from "../../hooks/useAuth";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import NewRequest from "../modals/requests/new";
 import { useQuery } from "react-query";
 import { useRequests } from "../../hooks/useRequests";
 import { RequestType } from "../cards/newRequests";
+import { useFilter } from "../../hooks/useFilter";
+import { useAlmox } from "../../hooks/useAlmox";
 
 const Header = () => {
+  const { user, logoutUser } = useAuth();
   const navigate = useNavigate();
   const { fetch } = useRequests();
+  const { fetchAllRequests } = useAlmox();
   const requests = useQuery<RequestType[]>(["userRequests"], fetch);
 
   const [isRequesting, setIsRequesting] = useState(false);
-  const newReq = useMemo(
-    () => requests.data?.filter((r) => r.status === "Aguardando Separação"),
-    [requests.data]
-  );
+
+  const allReq = useQuery<RequestType[]>(["allRequests"], fetchAllRequests);
+
+  const { newReq: userNewReq } = useFilter(requests.data, "asd");
+  const { newReq: almoxNewReq } = useFilter(allReq.data, "asd");
 
   function handleNavigate(e: React.FormEvent, path: string) {
     e.preventDefault();
     navigate(path);
   }
-
-  const { user, logoutUser } = useAuth();
 
   function handleCloseModal() {
     setIsRequesting((prev) => !prev);
@@ -89,34 +90,20 @@ const Header = () => {
                   </NavDropdown>
                 )}
                 {user?.almox && (
-                  <NavDropdown
-                    title="Almoxarifado"
-                    id="offcanvasNavbarDropdown-expand-xxl"
-                    menuVariant="dark"
-                    drop="down-centered"
+                  <Nav.Link
+                    onClick={(e) => handleNavigate(e, "/almox/dashboard")}
+                    className="requestsNotify"
+                    data-set={almoxNewReq ? almoxNewReq.length : 0}
                   >
-                    <NavDropdown.Item
-                      className="d-flex justify-content-between gap-2 align-items-center"
-                      onClick={(e) => handleNavigate(e, "/almox/dashboard")}
-                    >
-                      <MdOutlineDashboardCustomize /> Dashboard
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      className="d-flex justify-content-between gap-2 align-items-center"
-                      onClick={(e) =>
-                        handleNavigate(e, "/almox/canceledRequests")
-                      }
-                    >
-                      <TiCancel /> Solicitações Canceladas
-                    </NavDropdown.Item>
-                  </NavDropdown>
+                    Almoxarifado
+                  </Nav.Link>
                 )}
                 {user?.requester && (
                   <>
                     <Nav.Link
                       onClick={(e) => handleNavigate(e, "/requests")}
                       className="requestsNotify"
-                      data-set={newReq ? newReq.length : 0}
+                      data-set={userNewReq ? userNewReq.length : 0}
                     >
                       Solicitações
                     </Nav.Link>

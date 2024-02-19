@@ -1,64 +1,23 @@
 import { useState } from "react";
 import RequestDetails from "../../modals/requests/details";
+import { RequestType } from "../newRequests";
 
-type RequestedBy = {
-  id: string;
-  name: string;
-  login: string;
-  phone: string;
-  email: string;
-};
-
-type SeparetedBy = {
-  id?: string;
-  name?: string;
-  login?: string;
-  phone?: string;
-  email?: string;
-};
-
-type DispatchedBy = {
-  id?: string;
-  name?: string;
-  login?: string;
-  phone?: string;
-  email?: string;
-};
-
-type CollectedBy = {
-  name?: string;
-  document?: string;
-};
-
-export interface RequestType {
-  _id: string;
-  requestedBy: RequestedBy;
-  status: string;
-  exitID: number;
-  desc: string;
-  separetedBy: SeparetedBy;
-  separetedAt: string;
-  dispatchedBy: DispatchedBy;
-  collectedBy: CollectedBy;
-  collectedAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const NewRequetCard = ({ request }: { request: RequestType }) => {
+const CancelledReqCard = ({ request }: { request: RequestType }) => {
   const [show, setShow] = useState(false);
 
   function handleClose() {
     setShow((prev) => !prev);
   }
-
   return (
     <>
       <RequestDetails show={show} handleClose={handleClose} request={request} />
       <div
+        className="d-flex flex-column justify-content-center p-2 mx-auto rounded border canceledReq bg-light"
         onClick={handleClose}
-        className="d-flex flex-column justify-content-center p-2 mx-auto rounded border newRequestCard bg-light"
-        style={{ width: "90%", position: "relative" }}
+        style={{
+          width: "90%",
+          position: "relative",
+        }}
       >
         <h6 className="d-flex gap-1">
           <b style={{ whiteSpace: "nowrap" }}>ID de Saída:</b>{" "}
@@ -79,9 +38,12 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
         <span style={{ fontSize: ".825rem" }}>
           Solicitado: {new Date(request.createdAt).toLocaleString("pt-BR")}
         </span>
+        <span style={{ fontSize: ".825rem" }}>
+          Cancelado: {new Date(request.updatedAt).toLocaleString("pt-BR")}
+        </span>
       </div>
     </>
   );
 };
 
-export default NewRequetCard;
+export default CancelledReqCard;

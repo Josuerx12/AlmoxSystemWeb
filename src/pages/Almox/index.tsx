@@ -1,43 +1,40 @@
 import { Button } from "react-bootstrap";
-import { FaFilter, FaPlus } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
-import NewRequest from "../../components/modals/requests/new";
-import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { useRequests } from "../../hooks/useRequests";
-import NewRequetCard, { RequestType } from "../../components/cards/newRequests";
+import { SkeletonCard } from "../../components/skelletons/card/styles";
+import NewRequetCard from "../../components/cards/newRequests";
+import { useAlmox } from "../../hooks/useAlmox";
+import { useState } from "react";
+import { useFilter } from "../../hooks/useFilter";
 import InSeparationReqCard from "../../components/cards/isSeparationReq";
 import WaitingToCollectCard from "../../components/cards/waitingToCollect";
 import CollectedReqCard from "../../components/cards/collectedReq";
-import { SkeletonCard } from "../../components/skelletons/card/styles";
-import { useFilter } from "../../hooks/useFilter";
+import CancelledReqCard from "../../components/cards/cancelledReq";
 
-const RequestsPage = () => {
-  const { fetch } = useRequests();
+const AlmoxPage = () => {
   const [filters, setFilters] = useState(false);
-
-  const requests = useQuery<RequestType[]>(["userRequests"], fetch);
-
+  const { fetchAllRequests } = useAlmox();
   const query = useQueryClient();
-
-  const [isRequesting, setIsRequesting] = useState(false);
-
-  function handleCloseRequesting() {
-    setIsRequesting((prev) => !prev);
-  }
-
-  const { newReq, inSeparationReq, collectedReq, waitingToCollectReq } =
-    useFilter(requests.data, filters);
+  const allReq = useQuery(["allRequests"], fetchAllRequests, {
+    refetchInterval: 300000,
+  });
+  const {
+    newReq,
+    canceledReq,
+    collectedReq,
+    inSeparationReq,
+    waitingToCollectReq,
+  } = useFilter(allReq.data, filters);
 
   return (
     <>
-      <NewRequest show={isRequesting} handleClose={handleCloseRequesting} />
       <section className="m-3" style={{ flex: "1" }}>
-        <h3 className="text-center fw-bold fs-2">Solicitações</h3>
+        <h3 className="text-center fw-bold fs-2">Almoxarifado - Dashboard</h3>
         <div className="d-flex justify-content-end gap-2 mb-3">
           <Button
             variant="dark"
-            onClick={() => query.resetQueries("userRequests")}
+            onClick={() => query.resetQueries("allRequests")}
             className="d-flex gap-2 align-items-center justify-content-center btn-refresh"
           >
             <LuRefreshCcw />
@@ -48,14 +45,8 @@ const RequestsPage = () => {
           >
             <FaFilter /> Filtrar
           </Button>
-          <Button
-            onClick={handleCloseRequesting}
-            className="d-flex gap-2 align-items-center justify-content-center"
-            variant="dark"
-          >
-            <FaPlus /> Nova Solicitação
-          </Button>
         </div>
+
         <div
           className="d-flex justify-content-between gap-3 bg-light p-3 rounded border"
           style={{ overflowY: "auto" }}
@@ -70,7 +61,7 @@ const RequestsPage = () => {
             }}
           >
             <h5 className="text-center fw-bold">Novas</h5>
-            {requests.isLoading
+            {allReq.isLoading
               ? Array.from(Array(4)).map((_, i) => {
                   return <SkeletonCard key={i} />;
                 })
@@ -89,7 +80,7 @@ const RequestsPage = () => {
           >
             <h5 className="text-center fw-bold">Em Separação</h5>
 
-            {requests.isLoading
+            {allReq.isLoading
               ? Array.from(Array(4)).map((_, i) => {
                   return <SkeletonCard key={i} />;
                 })
@@ -108,7 +99,7 @@ const RequestsPage = () => {
           >
             <h5 className="text-center fw-bold">Aguardando Coleta</h5>
 
-            {requests.isLoading
+            {allReq.isLoading
               ? Array.from(Array(4)).map((_, i) => {
                   return <SkeletonCard key={i} />;
                 })
@@ -126,12 +117,30 @@ const RequestsPage = () => {
             }}
           >
             <h5 className="text-center fw-bold">Coletadas</h5>
-            {requests.isLoading
+            {allReq.isLoading
               ? Array.from(Array(4)).map((_, i) => {
                   return <SkeletonCard key={i} />;
                 })
               : collectedReq?.map((r) => (
                   <CollectedReqCard request={r} key={r._id} />
+                ))}
+          </div>
+          <div
+            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+            style={{
+              minWidth: "350px",
+              flex: "1",
+              height: "70dvh",
+              overflowX: "auto",
+            }}
+          >
+            <h5 className="text-center fw-bold">Solicitações Canceladas</h5>
+            {allReq.isLoading
+              ? Array.from(Array(4)).map((_, i) => {
+                  return <SkeletonCard key={i} />;
+                })
+              : canceledReq?.map((r) => (
+                  <CancelledReqCard request={r} key={r._id} />
                 ))}
           </div>
         </div>
@@ -140,4 +149,4 @@ const RequestsPage = () => {
   );
 };
 
-export { RequestsPage };
+export { AlmoxPage };
