@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { FaSave } from "react-icons/fa";
 import { TiCancel } from "react-icons/ti";
@@ -17,38 +17,44 @@ export type NewReqCredentials = {
   desc: string;
 };
 
+export type MutationError = {
+  exitID: { msg: string };
+  desc: { msg: string };
+};
+
 const NewRequest = ({ show, handleClose }: Props) => {
   const { newReq } = useRequests();
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
-      exitID: 0,
+      exitID: undefined,
       desc: "",
     },
   });
 
   const query = useQueryClient();
 
+  const { mutateAsync, isLoading, error, reset } = useMutation<
+    any,
+    MutationError,
+    NewReqCredentials
+  >(["NovaReq"], (data) => newReq(data), {
+    onSuccess: () =>
+      Promise.all([
+        handleClose(),
+        cleanCredentials(),
+        query.invalidateQueries("allReq"),
+        query.invalidateQueries("userRequests"),
+      ]),
+  });
+
   function cleanCredentials() {
-    setValue("exitID", 0);
+    setValue("exitID", undefined);
     setValue("desc", "");
+    reset();
   }
 
-  const mutation = useMutation<any, any>(
-    ["NovaReq"],
-    (data: any) => newReq(data),
-    {
-      onSuccess: () =>
-        Promise.all([
-          handleClose(),
-          cleanCredentials(),
-          query.invalidateQueries("allReq"),
-          query.invalidateQueries("userRequests"),
-        ]),
-    }
-  );
-
   async function onSubmit(data: any) {
-    await mutation.mutateAsync(data);
+    await mutateAsync(data);
   }
 
   const ref = useRef<HTMLFormElement | null>(null);
@@ -62,30 +68,56 @@ const NewRequest = ({ show, handleClose }: Props) => {
       <Modal.Body>
         <Form
           ref={ref}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit(onSubmit)();
-          }}
+          onSubmit={handleSubmit(onSubmit)}
           className="d-flex flex-column gap-3"
         >
           <Form.Group>
             <Form.Label>ID de Saída</Form.Label>
             <Form.Control type="number" {...register("exitID")} />
+            {error?.exitID && (
+              <Form.Text className="text-danger fw-bold">
+                {error.exitID.msg}
+              </Form.Text>
+            )}
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Descrição</Form.Label>
             <Form.Control as="textarea" rows={5} {...register("desc")} />
+            {error?.desc && (
+              <Form.Text className="text-danger fw-bold">
+                {error.desc.msg}
+              </Form.Text>
+            )}
           </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            handleClose();
+            cleanCredentials();
+          }}
+        >
           <TiCancel style={{ fontSize: "1.3rem" }} /> Cancelar
         </Button>
-        <Button variant="primary" onClick={() => ref.current?.requestSubmit()}>
-          <FaSave /> Cadastrar
+
+        <Button
+          variant="primary"
+          disabled={isLoading}
+          onClick={() => ref.current?.requestSubmit()}
+        >
+          {isLoading ? (
+            <>
+              Cadastrando <Spinner size="sm" animation="border" />
+            </>
+          ) : (
+            <>
+              <FaSave /> Cadastrar
+            </>
+          )}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -1,8 +1,8 @@
 import { Button, Modal, Spinner } from "react-bootstrap";
-import { RequestType } from "../../../cards/newRequests";
 import { FaCheckCircle, FaExclamation } from "react-icons/fa";
 import { useAlmox } from "../../../../hooks/useAlmox";
 import { useMutation, useQueryClient } from "react-query";
+import { RequestType } from "../../../cards/newRequests";
 
 type Props = {
   show: boolean;
@@ -10,14 +10,13 @@ type Props = {
   request: RequestType;
 };
 
-const InSeparationConfirmation = ({ show, handleClose, request }: Props) => {
-  const { startSeparation } = useAlmox();
-
+const SeparetedReqConfirmation = ({ show, handleClose, request }: Props) => {
+  const { awaitingCollection } = useAlmox();
   const query = useQueryClient();
 
   const { mutateAsync, isLoading } = useMutation(
-    ["startSeparation"],
-    () => startSeparation(request._id),
+    ["separetedRequest"],
+    () => awaitingCollection(request._id),
     {
       onSuccess: () =>
         Promise.all([
@@ -27,7 +26,6 @@ const InSeparationConfirmation = ({ show, handleClose, request }: Props) => {
         ]),
     }
   );
-
   return (
     <Modal size="lg" show={show} onHide={handleClose}>
       <Modal.Header closeButton />
@@ -46,7 +44,7 @@ const InSeparationConfirmation = ({ show, handleClose, request }: Props) => {
         />
 
         <p>
-          Tem certeza que deseja começar a separação da ID de saída numero:{" "}
+          Tem certeza que deseja finalizar a separação da ID de saída numero:{" "}
           <b> {request.exitID} </b>?
         </p>
       </Modal.Body>
@@ -59,11 +57,11 @@ const InSeparationConfirmation = ({ show, handleClose, request }: Props) => {
         >
           {isLoading ? (
             <>
-              Iniciando Separação <Spinner size="sm" animation="border" />
+              Finalizando Separação <Spinner size="sm" animation="border" />
             </>
           ) : (
             <>
-              Confirmar Inicio da Separação <FaCheckCircle />
+              Confirmar Fim da Separação <FaCheckCircle />
             </>
           )}
         </Button>
@@ -72,4 +70,4 @@ const InSeparationConfirmation = ({ show, handleClose, request }: Props) => {
   );
 };
 
-export { InSeparationConfirmation };
+export default SeparetedReqConfirmation;

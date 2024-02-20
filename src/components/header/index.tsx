@@ -10,7 +10,7 @@ import { IoGitPullRequestSharp } from "react-icons/io5";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
 import NewRequest from "../modals/requests/new";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useRequests } from "../../hooks/useRequests";
 import { RequestType } from "../cards/newRequests";
 import { useFilter } from "../../hooks/useFilter";
@@ -38,6 +38,8 @@ const Header = () => {
   function handleCloseModal() {
     setIsRequesting((prev) => !prev);
   }
+
+  const query = useQueryClient();
 
   return (
     <>
@@ -125,7 +127,12 @@ const Header = () => {
                   </Nav.Link>
                 )}
                 {user && (
-                  <Nav.Link onClick={logoutUser}>
+                  <Nav.Link
+                    onClick={() => {
+                      logoutUser();
+                      query.clear();
+                    }}
+                  >
                     Sair <RiLogoutBoxRLine />
                   </Nav.Link>
                 )}

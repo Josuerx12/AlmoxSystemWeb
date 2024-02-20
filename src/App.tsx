@@ -25,20 +25,23 @@ const App = () => {
         <Route
           path="/"
           element={
-            user ? (
-              <Navigate to="/solicitacao/acompanhar" />
-            ) : (
-              <Navigate to="/login" />
-            )
+            user ? <Navigate to="/requests" /> : <Navigate to="/login" />
           }
         />
-        <Route path="/requests" element={<RequestsPage />} />
-        <Route path="/almox/dashboard" element={<AlmoxPage />} />
+        <Route
+          path="/requests"
+          element={user ? <RequestsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/almox/dashboard"
+          element={user?.almox ? <AlmoxPage /> : <Navigate to="/requests" />}
+        />
         <Route
           path="/login"
-          element={user ? <Navigate to="/solicitacao/acompanhar" /> : <Login />}
+          element={user ? <Navigate to="/requests" /> : <Login />}
         />
         {!user && <Route path="*" element={<Navigate to="/login" />} />}
+        {user && <Route path="*" element={<Navigate to="/requests" />} />}
       </Routes>
       <Footer />
     </div>

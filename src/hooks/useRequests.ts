@@ -22,8 +22,8 @@ export const useRequests = () => {
     try {
       const res = await api(token).post("/requests/new", data);
       return res;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw error.response.data.errors;
     }
   }
 

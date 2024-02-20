@@ -1,6 +1,6 @@
 import { useState } from "react";
-import RequestDetails from "../../modals/requests/details";
 import { RequestType } from "../newRequests";
+import { RequestDetails } from "../../modals/requests/details";
 
 const WaitingToCollectCard = ({ request }: { request: RequestType }) => {
   const [show, setShow] = useState(false);

@@ -39,9 +39,9 @@ export const useAlmox = () => {
     collectorCredentials: { name: string; document: string };
   }) {
     try {
-      await api(token).post(`/requests/separated/${id}`, collectorCredentials);
+      await api(token).post(`/requests/collected/${id}`, collectorCredentials);
     } catch (error: any) {
-      throw error.message;
+      throw error.response.data.errors;
     }
   }
 

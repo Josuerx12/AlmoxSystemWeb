@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RequestDetails from "../../modals/requests/details";
+import { RequestDetails } from "../../modals/requests/details";
 
 type RequestedBy = {
   id: string;

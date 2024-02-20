@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RequestType } from "../newRequests";
-import RequestDetails from "../../modals/requests/details";
+import { RequestDetails } from "../../modals/requests/details";
 
 const InSeparationReqCard = ({ request }: { request: RequestType }) => {
   const [show, setShow] = useState(false);

@@ -2,9 +2,11 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { RequestType } from "../../../cards/newRequests";
 import { useAuth } from "../../../../hooks/useAuth";
 import { FaPeopleCarryBox, FaPeopleGroup, FaXmark } from "react-icons/fa6";
-import { FaBoxes } from "react-icons/fa";
-import InSeparationAlert from "../../confirmations/inSeparationReq";
+import { FaBoxes, FaInfo } from "react-icons/fa";
 import { useState } from "react";
+import { InSeparationConfirmation } from "../../confirmations/inSeparationReq";
+import SeparetedReqConfirmation from "../../confirmations/separetedReq";
+import DeliverReqConfirmation from "../../confirmations/deliverReq";
 
 type Props = {
   show: boolean;
@@ -15,22 +17,48 @@ type Props = {
 const RequestDetails = ({ show, handleClose, request }: Props) => {
   const { user } = useAuth();
   const [isSeparating, setIsSeparating] = useState(false);
+  const [isSepareted, setIsSeparated] = useState(false);
+  const [isDelivering, setIsDelivering] = useState(false);
   return (
     <>
-      <InSeparationAlert
+      <DeliverReqConfirmation
+        show={isDelivering}
+        handleClose={() => setIsDelivering((prev) => !prev)}
+        request={request}
+      />
+      <SeparetedReqConfirmation
+        show={isSepareted}
+        handleClose={() => setIsSeparated((prev) => !prev)}
+        request={request}
+      />
+      <InSeparationConfirmation
         show={isSeparating}
         handleClose={() => setIsSeparating((prev) => !prev)}
         request={request}
       />
       <Modal
-        style={isSeparating ? { opacity: "0" } : { opacity: "1" }}
+        style={
+          isSeparating || isSepareted || isDelivering
+            ? { opacity: "0" }
+            : { opacity: "1" }
+        }
         show={show}
         onHide={handleClose}
         backdrop="static"
         size="xl"
       >
         <Modal.Header closeButton>
-          <h4>Detalhes da Requisição</h4>
+          <h4 className="d-flex gap-2 justify-content-center align-items-center">
+            <FaInfo
+              style={{
+                border: "2px solid blue",
+                borderRadius: "50%",
+                padding: ".2rem",
+                fontSize: "2rem",
+              }}
+            />
+            Detalhes da Requisição
+          </h4>
         </Modal.Header>
         <Modal.Body>
           <h6 className="fs-5">
@@ -38,7 +66,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
             {request.status}
           </h6>
           <Form className="mt-3">
-            <Form.Group className="d-flex gap-3 flex-wrap">
+            <Form.Group className="d-flex gap-3 flex-wrap mt-3">
               <Form.Group style={{ flexBasis: "150px", flexGrow: "1" }}>
                 <Form.Label>ID do Orquestra:</Form.Label>
                 <Form.Control type="number" disabled value={request.exitID} />
@@ -175,7 +203,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
               </Form.Group>
             )}
             {request.desc && (
-              <Form.Group>
+              <Form.Group className="mt-3">
                 <Form.Label>Descrição</Form.Label>
                 <Form.Control
                   as="textarea"
@@ -190,7 +218,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
         {user?.almox && (
           <Modal.Footer>
             {user.login === request.requestedBy.login &&
-              request.status !== "Aguardando Coleta" && (
+              request.status === "Aguardando Separação" && (
                 <Button
                   className="d-flex justify-content-center align-items-center gap-1"
                   variant="danger"
@@ -218,12 +246,16 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
               <Button
                 className="d-flex justify-content-center align-items-center gap-1"
                 variant="success"
+                onClick={() => setIsSeparated((prev) => !prev)}
               >
                 <FaPeopleGroup /> Finalizar Separação
               </Button>
             )}
             {request.status === "Aguardando Coleta" && (
-              <Button variant="success">
+              <Button
+                onClick={() => setIsDelivering((prev) => !prev)}
+                variant="success"
+              >
                 <FaBoxes /> Realizar Entrega
               </Button>
             )}
@@ -234,4 +266,4 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
   );
 };
 
-export default RequestDetails;
+export { RequestDetails };

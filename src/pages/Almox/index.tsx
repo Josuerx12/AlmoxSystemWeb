@@ -52,7 +52,7 @@ const AlmoxPage = () => {
           style={{ overflowY: "auto" }}
         >
           <div
-            className=" d-flex flex-column gap-3 border rounded bg-white p-2"
+            className=" d-flex flex-column gap-3 border rounded mx-auto bg-white p-2"
             style={{
               minWidth: "350px",
               flex: "1",
@@ -61,13 +61,17 @@ const AlmoxPage = () => {
             }}
           >
             <h5 className="text-center fw-bold">Novas</h5>
-            {allReq.isLoading
-              ? Array.from(Array(4)).map((_, i) => {
-                  return <SkeletonCard key={i} />;
-                })
-              : newReq?.map((req) => (
-                  <NewRequetCard key={req._id} request={req} />
-                ))}
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : newReq && newReq.length > 0 ? (
+              newReq.map((req) => <NewRequetCard key={req._id} request={req} />)
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição realizada!
+              </p>
+            )}
           </div>
           <div
             className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
@@ -80,13 +84,19 @@ const AlmoxPage = () => {
           >
             <h5 className="text-center fw-bold">Em Separação</h5>
 
-            {allReq.isLoading
-              ? Array.from(Array(4)).map((_, i) => {
-                  return <SkeletonCard key={i} />;
-                })
-              : inSeparationReq?.map((r) => (
-                  <InSeparationReqCard key={r._id} request={r} />
-                ))}
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : inSeparationReq && inSeparationReq.length > 0 ? (
+              inSeparationReq.map((r) => (
+                <InSeparationReqCard key={r._id} request={r} />
+              ))
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição realizada!
+              </p>
+            )}
           </div>
           <div
             className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
@@ -99,13 +109,19 @@ const AlmoxPage = () => {
           >
             <h5 className="text-center fw-bold">Aguardando Coleta</h5>
 
-            {allReq.isLoading
-              ? Array.from(Array(4)).map((_, i) => {
-                  return <SkeletonCard key={i} />;
-                })
-              : waitingToCollectReq?.map((r) => (
-                  <WaitingToCollectCard key={r._id} request={r} />
-                ))}
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : waitingToCollectReq && waitingToCollectReq.length > 0 ? (
+              waitingToCollectReq.map((r) => (
+                <WaitingToCollectCard key={r._id} request={r} />
+              ))
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição realizada!
+              </p>
+            )}
           </div>
           <div
             className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
@@ -117,13 +133,19 @@ const AlmoxPage = () => {
             }}
           >
             <h5 className="text-center fw-bold">Coletadas</h5>
-            {allReq.isLoading
-              ? Array.from(Array(4)).map((_, i) => {
-                  return <SkeletonCard key={i} />;
-                })
-              : collectedReq?.map((r) => (
-                  <CollectedReqCard request={r} key={r._id} />
-                ))}
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : collectedReq && collectedReq.length ? (
+              collectedReq.map((r) => (
+                <CollectedReqCard request={r} key={r._id} />
+              ))
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição realizada!
+              </p>
+            )}
           </div>
           <div
             className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
@@ -135,13 +157,19 @@ const AlmoxPage = () => {
             }}
           >
             <h5 className="text-center fw-bold">Solicitações Canceladas</h5>
-            {allReq.isLoading
-              ? Array.from(Array(4)).map((_, i) => {
-                  return <SkeletonCard key={i} />;
-                })
-              : canceledReq?.map((r) => (
-                  <CancelledReqCard request={r} key={r._id} />
-                ))}
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : canceledReq && canceledReq.length > 0 ? (
+              canceledReq.map((r) => (
+                <CancelledReqCard request={r} key={r._id} />
+              ))
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição realizada!
+              </p>
+            )}
           </div>
         </div>
       </section>
