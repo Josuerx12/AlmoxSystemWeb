@@ -3,7 +3,7 @@ import { FaFilter } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 import { useQuery, useQueryClient } from "react-query";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
-import NewRequetCard from "../../components/cards/newRequests";
+import NewRequetCard, { RequestType } from "../../components/cards/newRequests";
 import { useAlmox } from "../../hooks/useAlmox";
 import { useState } from "react";
 import { useFilter } from "../../hooks/useFilter";
@@ -11,24 +11,50 @@ import InSeparationReqCard from "../../components/cards/isSeparationReq";
 import WaitingToCollectCard from "../../components/cards/waitingToCollect";
 import CollectedReqCard from "../../components/cards/collectedReq";
 import CancelledReqCard from "../../components/cards/cancelledReq";
+import RequestFilters, {
+  RequestFiltersProps,
+} from "../../components/filters/requestFilters";
 
 const AlmoxPage = () => {
-  const [filters, setFilters] = useState(false);
+  const [filters, setFilters] = useState<RequestFiltersProps>({
+    exitID: undefined,
+    startPeriod: "",
+    endPeriod: "",
+  });
+  const [isFiltering, setIsFiltering] = useState(false);
   const { fetchAllRequests } = useAlmox();
   const query = useQueryClient();
-  const allReq = useQuery(["allRequests"], fetchAllRequests, {
+  const allReq = useQuery<RequestType[]>(["allRequests"], fetchAllRequests, {
     refetchInterval: 300000,
   });
+
+  const filteredReqs = allReq.data?.filter((req) => {
+    return (
+      (!filters.exitID ||
+        req.exitID.toString().includes(filters.exitID.toString())) &&
+      (!filters.startPeriod ||
+        new Date(req.createdAt) >= new Date(filters.startPeriod)) &&
+      (!filters.endPeriod ||
+        new Date(req.createdAt) <= new Date(filters.endPeriod))
+    );
+  });
+
   const {
     newReq,
     canceledReq,
     collectedReq,
     inSeparationReq,
     waitingToCollectReq,
-  } = useFilter(allReq.data, filters);
+  } = useFilter(filteredReqs);
 
   return (
     <>
+      <RequestFilters
+        show={isFiltering}
+        handleClose={() => setIsFiltering((prev) => !prev)}
+        filters={filters}
+        setFilters={setFilters}
+      />
       <section className="m-3" style={{ flex: "1" }}>
         <h3 className="text-center fw-bold fs-2">Almoxarifado - Dashboard</h3>
         <div className="d-flex justify-content-end gap-2 mb-3">
@@ -42,6 +68,7 @@ const AlmoxPage = () => {
           <Button
             variant="primary"
             className="d-flex gap-2 align-items-center justify-content-center"
+            onClick={() => setIsFiltering((prev) => !prev)}
           >
             <FaFilter /> Filtrar
           </Button>

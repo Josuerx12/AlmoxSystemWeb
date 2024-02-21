@@ -5,7 +5,7 @@ export const api = (token?: string) => {
 
   if (token) {
     return (connection = axios.create({
-      baseURL: "http://localhost:3000",
+      baseURL: "https://almox-system.vercel.app",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -14,7 +14,7 @@ export const api = (token?: string) => {
   }
 
   connection = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "https://almox-system.vercel.app",
     headers: {
       "Content-Type": "application/json",
     },

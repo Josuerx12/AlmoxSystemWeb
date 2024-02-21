@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { RequestType } from "../components/cards/newRequests";
 
-export const useFilter = (requests?: RequestType[], filters: any) => {
+export const useFilter = (requests?: RequestType[]) => {
   const newReq = useMemo(
     () => requests?.filter((r) => r.status === "Aguardando Separação"),
     [requests]

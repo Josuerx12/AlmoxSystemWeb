@@ -8,6 +8,10 @@ const CancelledReqCard = ({ request }: { request: RequestType }) => {
   function handleClose() {
     setShow((prev) => !prev);
   }
+
+  const createdAtSplited = request.createdAt.split("T")[0].split("-");
+  const updatedAtSplited = request.createdAt.split("T")[0].split("-");
+
   return (
     <>
       <RequestDetails show={show} handleClose={handleClose} request={request} />
@@ -36,10 +40,12 @@ const CancelledReqCard = ({ request }: { request: RequestType }) => {
           )}
         </p>
         <span style={{ fontSize: ".825rem" }}>
-          Solicitado: {new Date(request.createdAt).toLocaleString("pt-BR")}
+          Solicitado: {createdAtSplited[2]}/{createdAtSplited[1]}/
+          {createdAtSplited[0]}
         </span>
         <span style={{ fontSize: ".825rem" }}>
-          Cancelado: {new Date(request.updatedAt).toLocaleString("pt-BR")}
+          Cancelado: {updatedAtSplited[2]}/{updatedAtSplited[1]}/
+          {updatedAtSplited[0]}
         </span>
       </div>
     </>

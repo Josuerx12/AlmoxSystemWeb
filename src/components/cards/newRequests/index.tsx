@@ -52,6 +52,8 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
     setShow((prev) => !prev);
   }
 
+  const createdAtSplited = request.createdAt.split("T")[0].split("-");
+
   return (
     <>
       <RequestDetails show={show} handleClose={handleClose} request={request} />
@@ -77,7 +79,8 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
           )}
         </p>
         <span style={{ fontSize: ".825rem" }}>
-          Solicitado: {new Date(request.createdAt).toLocaleString("pt-BR")}
+          Solicitado: {createdAtSplited[2]}/{createdAtSplited[1]}/
+          {createdAtSplited[0]}
         </span>
       </div>
     </>

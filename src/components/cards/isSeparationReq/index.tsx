@@ -9,6 +9,9 @@ const InSeparationReqCard = ({ request }: { request: RequestType }) => {
     setShow((prev) => !prev);
   }
 
+  const createdAtSplited = request.createdAt.split("T")[0].split("-");
+  const updatedAtSplited = request.createdAt.split("T")[0].split("-");
+
   return (
     <>
       <RequestDetails show={show} handleClose={handleClose} request={request} />
@@ -37,11 +40,12 @@ const InSeparationReqCard = ({ request }: { request: RequestType }) => {
           )}
         </p>
         <span style={{ fontSize: ".825rem" }}>
-          Solicitado: {new Date(request.createdAt).toLocaleString("pt-BR")}
+          Solicitado: {createdAtSplited[2]}/{createdAtSplited[1]}/
+          {createdAtSplited[0]}
         </span>
         <span style={{ fontSize: ".825rem" }}>
-          Inicio da separação:{" "}
-          {new Date(request.updatedAt).toLocaleString("pt-BR")}
+          Inicio da separação: {updatedAtSplited[2]}/{updatedAtSplited[1]}/
+          {updatedAtSplited[0]}
         </span>
       </div>
     </>

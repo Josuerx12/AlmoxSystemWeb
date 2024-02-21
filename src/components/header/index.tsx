@@ -27,8 +27,8 @@ const Header = () => {
 
   const allReq = useQuery<RequestType[]>(["allRequests"], fetchAllRequests);
 
-  const { newReq: userNewReq } = useFilter(requests.data, "asd");
-  const { newReq: almoxNewReq } = useFilter(allReq.data, "asd");
+  const { newReq: userNewReq } = useFilter(requests.data);
+  const { newReq: almoxNewReq } = useFilter(allReq.data);
 
   function handleNavigate(e: React.FormEvent, path: string) {
     e.preventDefault();

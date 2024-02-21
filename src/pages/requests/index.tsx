@@ -11,26 +11,50 @@ import WaitingToCollectCard from "../../components/cards/waitingToCollect";
 import CollectedReqCard from "../../components/cards/collectedReq";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
 import { useFilter } from "../../hooks/useFilter";
+import RequestFilters, {
+  RequestFiltersProps,
+} from "../../components/filters/requestFilters";
 
 const RequestsPage = () => {
   const { fetch } = useRequests();
-  const [filters, setFilters] = useState(false);
+  const [filters, setFilters] = useState<RequestFiltersProps>({
+    exitID: undefined,
+    startPeriod: "",
+    endPeriod: "",
+  });
 
   const requests = useQuery<RequestType[]>(["userRequests"], fetch);
 
   const query = useQueryClient();
 
   const [isRequesting, setIsRequesting] = useState(false);
-
+  const [isFiltering, setIsFiltering] = useState(false);
   function handleCloseRequesting() {
     setIsRequesting((prev) => !prev);
   }
 
+  const filteredReqs = requests.data?.filter((req) => {
+    return (
+      (!filters.exitID ||
+        req.exitID.toString().includes(filters.exitID.toString())) &&
+      (!filters.startPeriod ||
+        new Date(req.createdAt) >= new Date(filters.startPeriod)) &&
+      (!filters.endPeriod ||
+        new Date(req.createdAt) <= new Date(filters.endPeriod))
+    );
+  });
+
   const { newReq, inSeparationReq, collectedReq, waitingToCollectReq } =
-    useFilter(requests.data, filters);
+    useFilter(filteredReqs);
 
   return (
     <>
+      <RequestFilters
+        show={isFiltering}
+        handleClose={() => setIsFiltering((prev) => !prev)}
+        filters={filters}
+        setFilters={setFilters}
+      />
       <NewRequest show={isRequesting} handleClose={handleCloseRequesting} />
       <section className="m-3" style={{ flex: "1" }}>
         <h3 className="text-center fw-bold fs-2">Solicitações</h3>
