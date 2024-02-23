@@ -32,13 +32,19 @@ const RequestFilters = ({ setFilters, filters, show, handleClose }: Props) => {
       startPeriod: "",
       endPeriod: "",
     });
-    setValue("exitID", filters.exitID);
-    setValue("startPeriod", filters.startPeriod);
-    setValue("endPeriod", filters.endPeriod);
+    setValue("exitID", undefined);
+    setValue("startPeriod", "");
+    setValue("endPeriod", "");
     handleClose();
   }
 
   const ref = useRef<HTMLFormElement | null>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function handleFilter(data: any) {
+    setFilters(data);
+    handleClose();
+  }
 
   return (
     <Offcanvas show={show} onHide={handleClose}>
@@ -63,7 +69,7 @@ const RequestFilters = ({ setFilters, filters, show, handleClose }: Props) => {
           </Button>
         </div>
 
-        <Form ref={ref} onSubmit={handleSubmit(setFilters)}>
+        <Form ref={ref} onSubmit={handleSubmit(handleFilter)}>
           <Form.Group>
             <Form.Label>Período</Form.Label>
             <Form.Group className="d-flex justify-content-between gap-3 align-items-center mb-3">
