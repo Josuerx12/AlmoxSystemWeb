@@ -1,53 +1,8 @@
 import { useState } from "react";
+import { RequestType } from "../newRequests";
 import { RequestDetails } from "../../modals/requests/details";
 
-type RequestedBy = {
-  id: string;
-  name: string;
-  login: string;
-  phone: string;
-  email: string;
-};
-
-type SeparetedBy = {
-  id?: string;
-  name?: string;
-  login?: string;
-  phone?: string;
-  email?: string;
-};
-
-type DispatchedBy = {
-  id?: string;
-  name?: string;
-  login?: string;
-  phone?: string;
-  email?: string;
-};
-
-type CollectedBy = {
-  name?: string;
-  document?: string;
-};
-
-export interface RequestType {
-  _id: string;
-  requestedBy: RequestedBy;
-  status: string;
-  exitID: number;
-  desc: string;
-  separetedBy: SeparetedBy;
-  separetedAt: string;
-  dispatchedBy: DispatchedBy;
-  collectedBy: CollectedBy;
-  canceledBy: DispatchedBy;
-  collectedAt: string;
-  createdAt: string;
-  updatedAt: string;
-  reason: string;
-}
-
-const NewRequetCard = ({ request }: { request: RequestType }) => {
+const WaitingToCancelReqCard = ({ request }: { request: RequestType }) => {
   const [show, setShow] = useState(false);
 
   function handleClose() {
@@ -55,14 +10,17 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
   }
 
   const createdAtSplited = request.createdAt.split("T")[0].split("-");
-
+  const updatedAtSplited = request.createdAt.split("T")[0].split("-");
   return (
     <>
       <RequestDetails show={show} handleClose={handleClose} request={request} />
       <div
+        className="d-flex flex-column justify-content-center p-2 mx-auto rounded border waitingToCancelCard bg-light"
         onClick={handleClose}
-        className="d-flex flex-column justify-content-center p-2 mx-auto rounded border newRequestCard bg-light"
-        style={{ width: "90%", position: "relative" }}
+        style={{
+          width: "90%",
+          position: "relative",
+        }}
       >
         <h6 className="d-flex gap-1">
           <b style={{ whiteSpace: "nowrap" }}>ID de Saída:</b>{" "}
@@ -90,9 +48,13 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
           Solicitado: {createdAtSplited[2]}/{createdAtSplited[1]}/
           {createdAtSplited[0]}
         </span>
+        <span style={{ fontSize: ".825rem" }}>
+          Cancelamento Solicitado: {updatedAtSplited[2]}/{updatedAtSplited[1]}/
+          {updatedAtSplited[0]}
+        </span>
       </div>
     </>
   );
 };
 
-export default NewRequetCard;
+export default WaitingToCancelReqCard;

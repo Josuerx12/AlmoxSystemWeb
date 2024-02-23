@@ -1,12 +1,14 @@
 import { Button, Form, Modal } from "react-bootstrap";
 import { RequestType } from "../../../cards/newRequests";
 import { useAuth } from "../../../../hooks/useAuth";
-import { FaPeopleCarryBox, FaPeopleGroup, FaXmark } from "react-icons/fa6";
-import { FaBoxes, FaInfo } from "react-icons/fa";
+import { FaPeopleCarryBox, FaPeopleGroup, FaX, FaXmark } from "react-icons/fa6";
+import { FaBoxes, FaInfo, FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { InSeparationConfirmation } from "../../confirmations/inSeparationReq";
 import SeparetedReqConfirmation from "../../confirmations/separetedReq";
 import DeliverReqConfirmation from "../../confirmations/deliverReq";
+import RequestCancelReqConfirmation from "../../confirmations/requestCancelReq";
+import CancelReqConfirmation from "../../confirmations/cancelReq";
 
 type Props = {
   show: boolean;
@@ -19,6 +21,8 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
   const [isSeparating, setIsSeparating] = useState(false);
   const [isSepareted, setIsSeparated] = useState(false);
   const [isDelivering, setIsDelivering] = useState(false);
+  const [isReqCanceling, setIsReqCanceling] = useState(false);
+  const [isCanceling, setIsCanceling] = useState(false);
   return (
     <>
       <DeliverReqConfirmation
@@ -36,9 +40,23 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
         handleClose={() => setIsSeparating((prev) => !prev)}
         request={request}
       />
+      <RequestCancelReqConfirmation
+        show={isReqCanceling}
+        handleClose={() => setIsReqCanceling((prev) => !prev)}
+        request={request}
+      />
+      <CancelReqConfirmation
+        show={isCanceling}
+        handleClose={() => setIsCanceling((prev) => !prev)}
+        request={request}
+      />
       <Modal
         style={
-          isSeparating || isSepareted || isDelivering
+          isSeparating ||
+          isSepareted ||
+          isDelivering ||
+          isReqCanceling ||
+          isCanceling
             ? { opacity: "0" }
             : { opacity: "1" }
         }
@@ -65,6 +83,16 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
             <b>Status: </b>
             {request.status}
           </h6>
+          {user?.admin && request.status === "Solicitação Cancelada" && (
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="outline-danger"
+                className="d-flex align-items-center justify-content-center gap-2"
+              >
+                <FaTrash /> Deletar
+              </Button>
+            </div>
+          )}
           <Form className="mt-3">
             <Form.Group className="d-flex gap-3 flex-wrap mt-3">
               <Form.Group style={{ flexBasis: "150px", flexGrow: "1" }}>
@@ -215,24 +243,26 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
             )}
           </Form>
         </Modal.Body>
+        {user?._id === request.requestedBy.id &&
+          request.status === "Aguardando Separação" && (
+            <Modal.Footer>
+              <Button
+                className="d-flex justify-content-center align-items-center gap-1"
+                variant="danger"
+                onClick={() => setIsReqCanceling((prev) => !prev)}
+              >
+                <FaXmark
+                  style={{
+                    border: "2px solid #fff",
+                    borderRadius: "50%",
+                  }}
+                />{" "}
+                Solicitar Cancelamento
+              </Button>
+            </Modal.Footer>
+          )}
         {user?.almox && (
           <Modal.Footer>
-            {user.login === request.requestedBy.login &&
-              request.status === "Aguardando Separação" && (
-                <Button
-                  className="d-flex justify-content-center align-items-center gap-1"
-                  variant="danger"
-                  onClick={handleClose}
-                >
-                  <FaXmark
-                    style={{
-                      border: "2px solid #fff",
-                      borderRadius: "50%",
-                    }}
-                  />{" "}
-                  Solicitar Cancelamento
-                </Button>
-              )}
             {request.status === "Aguardando Separação" && (
               <Button
                 className="d-flex justify-content-center align-items-center gap-1"
@@ -240,6 +270,15 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
                 onClick={() => setIsSeparating((prev) => !prev)}
               >
                 <FaPeopleCarryBox /> Iniciar Separação
+              </Button>
+            )}
+            {request.status === "Aguardando Cancelamento" && (
+              <Button
+                className="d-flex justify-content-center align-items-center gap-1"
+                variant="danger"
+                onClick={() => setIsCanceling((prev) => !prev)}
+              >
+                <FaX /> Confirmar Cancelamento
               </Button>
             )}
             {request.status === "Em Separação" && (

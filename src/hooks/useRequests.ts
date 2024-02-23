@@ -27,5 +27,28 @@ export const useRequests = () => {
     }
   }
 
-  return { fetch, newReq };
+  async function requestCancelReq({
+    id,
+    reason,
+  }: {
+    id: string;
+    reason: string;
+  }) {
+    try {
+      const res = await api(token).put(`/requests/requestCancel/${id}`, reason);
+      return res;
+    } catch (error: any) {
+      throw error.response.data.errors;
+    }
+  }
+  async function cancelReq(id: string) {
+    try {
+      const res = await api(token).put(`/requests/cancel/${id}`);
+      return res;
+    } catch (error: any) {
+      throw error.response.data.errors;
+    }
+  }
+
+  return { fetch, newReq, requestCancelReq, cancelReq };
 };

@@ -23,6 +23,10 @@ export const useFilter = (requests?: RequestType[]) => {
     () => requests?.filter((r) => r.status === "Solicitação Cancelada"),
     [requests]
   );
+  const requestsToCancelReq = useMemo(
+    () => requests?.filter((r) => r.status === "Aguardando Cancelamento"),
+    [requests]
+  );
 
   return {
     newReq,
@@ -30,5 +34,6 @@ export const useFilter = (requests?: RequestType[]) => {
     waitingToCollectReq,
     collectedReq,
     canceledReq,
+    requestsToCancelReq,
   };
 };

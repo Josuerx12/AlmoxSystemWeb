@@ -14,6 +14,7 @@ import CancelledReqCard from "../../components/cards/cancelledReq";
 import RequestFilters, {
   RequestFiltersProps,
 } from "../../components/filters/requestFilters";
+import WaitingToCancelReqCard from "../../components/cards/waitingToCancelReq";
 
 const AlmoxPage = () => {
   const [filters, setFilters] = useState<RequestFiltersProps>({
@@ -45,6 +46,7 @@ const AlmoxPage = () => {
     collectedReq,
     inSeparationReq,
     waitingToCollectReq,
+    requestsToCancelReq,
   } = useFilter(filteredReqs);
 
   return (
@@ -97,6 +99,30 @@ const AlmoxPage = () => {
             ) : (
               <p className="text-center fw-bold text-secondary">
                 Nenhuma requisição realizada!
+              </p>
+            )}
+          </div>
+          <div
+            className=" d-flex flex-column gap-3 border rounded mx-auto bg-white p-2"
+            style={{
+              minWidth: "350px",
+              flex: "1",
+              height: "70dvh",
+              overflowX: "auto",
+            }}
+          >
+            <h5 className="text-center fw-bold">Aguardando Cancelamento</h5>
+            {allReq.isLoading ? (
+              Array.from(Array(4)).map((_, i) => {
+                return <SkeletonCard key={i} />;
+              })
+            ) : requestsToCancelReq && requestsToCancelReq.length > 0 ? (
+              requestsToCancelReq.map((req) => (
+                <WaitingToCancelReqCard key={req._id} request={req} />
+              ))
+            ) : (
+              <p className="text-center fw-bold text-secondary">
+                Nenhuma requisição para cancelar!
               </p>
             )}
           </div>

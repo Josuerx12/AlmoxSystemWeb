@@ -47,10 +47,10 @@ const Header = () => {
       <Navbar key="xxl" expand="xxl" className="mb-3 bg-primary">
         <Container fluid>
           <Navbar.Brand
-            className="text-white"
+            className="text-white d-flex align-items-center justify-content-center gap-1"
             onClick={(e) => handleNavigate(e, "/")}
           >
-            AlmoxSystem
+            Separa <FaPlus />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="offcanvasNavbar-expand-xxl" />
           <Navbar.Offcanvas

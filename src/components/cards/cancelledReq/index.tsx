@@ -33,7 +33,13 @@ const CancelledReqCard = ({ request }: { request: RequestType }) => {
           {request.desc && (
             <>
               <b>Desc:</b>{" "}
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {request.desc}
               </span>
             </>
