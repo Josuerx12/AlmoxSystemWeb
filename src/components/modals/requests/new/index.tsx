@@ -52,6 +52,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
 
   function cleanCredentials() {
     setValue("exitID", undefined);
+    setValue("collectForecast", undefined);
     setValue("desc", undefined);
     reset();
   }
