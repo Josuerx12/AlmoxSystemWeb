@@ -14,11 +14,13 @@ type Props = {
 
 export type NewReqCredentials = {
   exitID: number;
+  collectForecast: Date;
   desc: string;
 };
 
 export type MutationError = {
   exitID: { msg: string };
+  collectForecast: { msg: string };
   desc: { msg: string };
 };
 
@@ -27,7 +29,8 @@ const NewRequest = ({ show, handleClose }: Props) => {
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       exitID: undefined,
-      desc: "",
+      collectForecast: undefined,
+      desc: undefined,
     },
   });
 
@@ -49,7 +52,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
 
   function cleanCredentials() {
     setValue("exitID", undefined);
-    setValue("desc", "");
+    setValue("desc", undefined);
     reset();
   }
 
@@ -81,6 +84,15 @@ const NewRequest = ({ show, handleClose }: Props) => {
             )}
           </Form.Group>
 
+          <Form.Group>
+            <Form.Label>Previsão de Coleta</Form.Label>
+            <Form.Control type="date" {...register("collectForecast")} />
+            {error?.collectForecast && (
+              <Form.Text className="text-danger fw-bold">
+                {error.collectForecast.msg}
+              </Form.Text>
+            )}
+          </Form.Group>
           <Form.Group>
             <Form.Label>Descrição</Form.Label>
             <Form.Control as="textarea" rows={5} {...register("desc")} />
