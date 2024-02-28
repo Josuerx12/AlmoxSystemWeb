@@ -243,63 +243,65 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
             )}
           </Form>
         </Modal.Body>
-        {user?._id === request.requestedBy.id &&
-          request.status === "Aguardando Separação" && (
-            <Modal.Footer>
-              <Button
-                className="d-flex justify-content-center align-items-center gap-1"
-                variant="danger"
-                onClick={() => setIsReqCanceling((prev) => !prev)}
-              >
-                <FaXmark
-                  style={{
-                    border: "2px solid #fff",
-                    borderRadius: "50%",
-                  }}
-                />{" "}
-                Solicitar Cancelamento
-              </Button>
-            </Modal.Footer>
+        <Modal.Footer>
+          {((user?._id === request.requestedBy.id &&
+            request.status === "Aguardando Separação") ||
+            user?.almox ||
+            user?.admin) && (
+            <Button
+              className="d-flex justify-content-center align-items-center gap-1"
+              variant="danger"
+              onClick={() => setIsReqCanceling((prev) => !prev)}
+            >
+              <FaXmark
+                style={{
+                  border: "2px solid #fff",
+                  borderRadius: "50%",
+                }}
+              />{" "}
+              Solicitar Cancelamento
+            </Button>
           )}
-        {user?.almox && (
-          <Modal.Footer>
-            {request.status === "Aguardando Separação" && (
-              <Button
-                className="d-flex justify-content-center align-items-center gap-1"
-                variant="success"
-                onClick={() => setIsSeparating((prev) => !prev)}
-              >
-                <FaPeopleCarryBox /> Iniciar Separação
-              </Button>
-            )}
-            {request.status === "Aguardando Cancelamento" && (
-              <Button
-                className="d-flex justify-content-center align-items-center gap-1"
-                variant="danger"
-                onClick={() => setIsCanceling((prev) => !prev)}
-              >
-                <FaX /> Confirmar Cancelamento
-              </Button>
-            )}
-            {request.status === "Em Separação" && (
-              <Button
-                className="d-flex justify-content-center align-items-center gap-1"
-                variant="success"
-                onClick={() => setIsSeparated((prev) => !prev)}
-              >
-                <FaPeopleGroup /> Finalizar Separação
-              </Button>
-            )}
-            {request.status === "Aguardando Coleta" && (
-              <Button
-                onClick={() => setIsDelivering((prev) => !prev)}
-                variant="success"
-              >
-                <FaBoxes /> Realizar Entrega
-              </Button>
-            )}
-          </Modal.Footer>
-        )}
+          {user?.almox && (
+            <>
+              {request.status === "Aguardando Separação" && (
+                <Button
+                  className="d-flex justify-content-center align-items-center gap-1"
+                  variant="success"
+                  onClick={() => setIsSeparating((prev) => !prev)}
+                >
+                  <FaPeopleCarryBox /> Iniciar Separação
+                </Button>
+              )}
+              {request.status === "Aguardando Cancelamento" && (
+                <Button
+                  className="d-flex justify-content-center align-items-center gap-1"
+                  variant="danger"
+                  onClick={() => setIsCanceling((prev) => !prev)}
+                >
+                  <FaX /> Confirmar Cancelamento
+                </Button>
+              )}
+              {request.status === "Em Separação" && (
+                <Button
+                  className="d-flex justify-content-center align-items-center gap-1"
+                  variant="success"
+                  onClick={() => setIsSeparated((prev) => !prev)}
+                >
+                  <FaPeopleGroup /> Finalizar Separação
+                </Button>
+              )}
+              {request.status === "Aguardando Coleta" && (
+                <Button
+                  onClick={() => setIsDelivering((prev) => !prev)}
+                  variant="success"
+                >
+                  <FaBoxes /> Realizar Entrega
+                </Button>
+              )}
+            </>
+          )}
+        </Modal.Footer>
       </Modal>
     </>
   );
