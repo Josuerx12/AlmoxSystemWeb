@@ -49,6 +49,14 @@ export const useRequests = () => {
       throw error.response.data.errors;
     }
   }
+  async function deleteReq(id: string) {
+    try {
+      const res = await api(token).delete(`/requests/${id}`);
+      return res;
+    } catch (error: any) {
+      throw error;
+    }
+  }
 
-  return { fetch, newReq, requestCancelReq, cancelReq };
+  return { fetch, newReq, requestCancelReq, cancelReq, deleteReq };
 };

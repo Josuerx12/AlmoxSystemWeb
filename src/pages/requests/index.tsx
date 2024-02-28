@@ -186,30 +186,26 @@ const RequestsPage = () => {
               </p>
             )}
           </div>
-          <div
-            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
-            style={{
-              minWidth: "350px",
-              flex: "1",
-              height: "70dvh",
-              overflowX: "auto",
-            }}
-          >
-            <h5 className="text-center fw-bold">Solicitações Canceladas</h5>
-            {requests.isLoading ? (
-              Array.from(Array(4)).map((_, i) => {
-                return <SkeletonCard key={i} />;
-              })
-            ) : canceledReq && canceledReq.length > 0 ? (
-              canceledReq.map((r) => (
-                <CancelledReqCard request={r} key={r._id} />
-              ))
-            ) : (
-              <p className="text-center fw-bold text-secondary">
-                Nenhuma solicitação cancelada!
-              </p>
-            )}
-          </div>
+          {canceledReq && canceledReq.length > 0 && (
+            <div
+              className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+              style={{
+                minWidth: "350px",
+                flex: "1",
+                height: "70dvh",
+                overflowX: "auto",
+              }}
+            >
+              <h5 className="text-center fw-bold">Solicitações Canceladas</h5>
+              {requests.isLoading
+                ? Array.from(Array(4)).map((_, i) => {
+                    return <SkeletonCard key={i} />;
+                  })
+                : canceledReq.map((r) => (
+                    <CancelledReqCard request={r} key={r._id} />
+                  ))}
+            </div>
+          )}
         </div>
       </section>
     </>

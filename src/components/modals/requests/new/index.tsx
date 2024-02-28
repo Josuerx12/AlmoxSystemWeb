@@ -45,7 +45,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
       Promise.all([
         handleClose(),
         cleanCredentials(),
-        query.invalidateQueries("allReq"),
+        query.invalidateQueries("allRequests"),
         query.invalidateQueries("userRequests"),
       ]),
   });

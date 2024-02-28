@@ -9,6 +9,7 @@ import SeparetedReqConfirmation from "../../confirmations/separetedReq";
 import DeliverReqConfirmation from "../../confirmations/deliverReq";
 import RequestCancelReqConfirmation from "../../confirmations/requestCancelReq";
 import CancelReqConfirmation from "../../confirmations/cancelReq";
+import DeleteRequestModal from "../delete";
 
 type Props = {
   show: boolean;
@@ -23,6 +24,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
   const [isDelivering, setIsDelivering] = useState(false);
   const [isReqCanceling, setIsReqCanceling] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <>
       <DeliverReqConfirmation
@@ -50,13 +52,19 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
         handleClose={() => setIsCanceling((prev) => !prev)}
         request={request}
       />
+      <DeleteRequestModal
+        show={isDeleting}
+        handleClose={() => setIsDeleting((prev) => !prev)}
+        request={request}
+      />
       <Modal
         style={
           isSeparating ||
           isSepareted ||
           isDelivering ||
           isReqCanceling ||
-          isCanceling
+          isCanceling ||
+          isDeleting
             ? { opacity: "0" }
             : { opacity: "1" }
         }
@@ -88,6 +96,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
               <Button
                 variant="outline-danger"
                 className="d-flex align-items-center justify-content-center gap-2"
+                onClick={() => setIsDeleting((prev) => !prev)}
               >
                 <FaTrash /> Deletar
               </Button>
@@ -246,8 +255,14 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
         <Modal.Footer>
           {((user?._id === request.requestedBy.id &&
             request.status === "Aguardando Separação") ||
-            user?.almox ||
-            user?.admin) && (
+            (user?.almox &&
+              request.status !== "Solicitação Cancelada" &&
+              request.status !== "Aguardando Cancelamento" &&
+              request.status !== "Coletado") ||
+            (user?.admin &&
+              request.status !== "Solicitação Cancelada" &&
+              request.status !== "Aguardando Cancelamento" &&
+              request.status !== "Coletado")) && (
             <Button
               className="d-flex justify-content-center align-items-center gap-1"
               variant="danger"
@@ -258,7 +273,7 @@ const RequestDetails = ({ show, handleClose, request }: Props) => {
                   border: "2px solid #fff",
                   borderRadius: "50%",
                 }}
-              />{" "}
+              />
               Solicitar Cancelamento
             </Button>
           )}
