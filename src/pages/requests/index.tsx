@@ -73,6 +73,7 @@ const RequestsPage = () => {
             <LuRefreshCcw />
           </Button>
           <Button
+            onClick={() => setIsFiltering((prev) => !prev)}
             variant="primary"
             className="d-flex gap-2 align-items-center justify-content-center"
           >
