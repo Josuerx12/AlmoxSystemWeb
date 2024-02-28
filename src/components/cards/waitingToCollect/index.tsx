@@ -30,6 +30,30 @@ const WaitingToCollectCard = ({ request }: { request: RequestType }) => {
           </span>
         </h6>
         <p className="d-flex gap-1">
+          {request.collectForecast && (
+            <>
+              <b style={{ whiteSpace: "nowrap" }}>Previsão de Coleta:</b>{" "}
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {new Date(
+                  request.collectForecast.split("T")[0].split("-")[0] +
+                    "-" +
+                    Number(
+                      request.collectForecast.split("T")[0].split("-")[1]
+                    ) +
+                    "-" +
+                    request.collectForecast.split("T")[0].split("-")[2]
+                ).toLocaleDateString("pt-BR")}
+              </span>
+            </>
+          )}
+        </p>
+        <p className="d-flex gap-1">
           {request.desc && (
             <>
               <b>Desc:</b>{" "}

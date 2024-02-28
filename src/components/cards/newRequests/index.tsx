@@ -36,6 +36,7 @@ export interface RequestType {
   status: string;
   exitID: number;
   desc: string;
+  collectForecast: string;
   separetedBy: SeparetedBy;
   separetedAt: string;
   dispatchedBy: DispatchedBy;
@@ -70,6 +71,30 @@ const NewRequetCard = ({ request }: { request: RequestType }) => {
             {request.exitID}
           </span>
         </h6>
+        <p className="d-flex gap-1">
+          {request.collectForecast && (
+            <>
+              <b style={{ whiteSpace: "nowrap" }}>Previsão de Coleta:</b>{" "}
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {new Date(
+                  request.collectForecast.split("T")[0].split("-")[0] +
+                    "-" +
+                    Number(
+                      request.collectForecast.split("T")[0].split("-")[1]
+                    ) +
+                    "-" +
+                    request.collectForecast.split("T")[0].split("-")[2]
+                ).toLocaleDateString("pt-BR")}
+              </span>
+            </>
+          )}
+        </p>
         <p className="d-flex gap-1">
           {request.desc && (
             <>

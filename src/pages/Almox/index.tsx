@@ -47,7 +47,33 @@ const AlmoxPage = () => {
     inSeparationReq,
     waitingToCollectReq,
     requestsToCancelReq,
-  } = useFilter(filteredReqs);
+  } = useFilter(
+    filteredReqs?.sort((fr1, fr2) => {
+      if (!fr1.collectForecast) {
+        fr1.collectForecast = new Date("2024-02-01").toString();
+      }
+      if (!fr2.collectForecast) {
+        fr2.collectForecast = new Date("2024-02-01").toString();
+      }
+
+      const collectForecastfr1 = new Date(
+        fr1.collectForecast.split("T")[0].split("-")[0] +
+          "-" +
+          Number(fr1.collectForecast.split("T")[0].split("-")[1]) +
+          "-" +
+          fr1.collectForecast.split("T")[0].split("-")[2]
+      ).getTime();
+      const collectForecastfr2 = new Date(
+        fr2.collectForecast.split("T")[0].split("-")[0] +
+          "-" +
+          Number(fr2.collectForecast.split("T")[0].split("-")[1]) +
+          "-" +
+          fr2.collectForecast.split("T")[0].split("-")[2]
+      ).getTime();
+
+      return collectForecastfr1 - collectForecastfr2;
+    })
+  );
 
   return (
     <>
@@ -87,6 +113,7 @@ const AlmoxPage = () => {
               flex: "1",
               height: "70dvh",
               overflowX: "auto",
+              paddingBottom: "1rem",
             }}
           >
             <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
@@ -133,6 +160,7 @@ const AlmoxPage = () => {
               flex: "1",
               height: "70dvh",
               overflowX: "auto",
+              paddingBottom: "1rem",
             }}
           >
             <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
@@ -160,6 +188,7 @@ const AlmoxPage = () => {
               flex: "1",
               height: "70dvh",
               overflowX: "auto",
+              paddingBottom: "1rem",
             }}
           >
             <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
@@ -187,6 +216,7 @@ const AlmoxPage = () => {
               flex: "1",
               height: "70dvh",
               overflowX: "auto",
+              paddingBottom: "1rem",
             }}
           >
             <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
