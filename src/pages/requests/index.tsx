@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import { FaFilter, FaPlus } from "react-icons/fa";
+import { FaFilter, FaPlus, FaWhatsapp } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 import NewRequest from "../../components/modals/requests/new";
 import { useState } from "react";
@@ -68,14 +68,23 @@ const RequestsPage = () => {
           <Button
             variant="dark"
             onClick={() => query.resetQueries("userRequests")}
+            title="Atualizar solicitações pendentes"
             className="d-flex gap-2 align-items-center justify-content-center btn-refresh"
           >
             <LuRefreshCcw />
           </Button>
           <Button
+            className="d-flex gap-2 align-items-center justify-content-center"
+            variant="outline-success"
+            title="Caso não esteja recebendo as mensagens por whatsapp clique aqui e responda!"
+          >
+            <FaWhatsapp /> Acompanhar
+          </Button>
+          <Button
             onClick={() => setIsFiltering((prev) => !prev)}
             variant="primary"
             className="d-flex gap-2 align-items-center justify-content-center"
+            title="Clique aqui para filtrar!"
           >
             <FaFilter /> Filtrar
           </Button>
@@ -83,6 +92,7 @@ const RequestsPage = () => {
             onClick={handleCloseRequesting}
             className="d-flex gap-2 align-items-center justify-content-center"
             variant="success"
+            title="Clique aqui para realizar uma nova solicitação!"
           >
             <FaPlus /> Nova Solicitação
           </Button>
