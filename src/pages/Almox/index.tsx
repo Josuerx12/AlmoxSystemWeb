@@ -81,7 +81,7 @@ const AlmoxPage = () => {
           style={{ overflowY: "auto" }}
         >
           <div
-            className=" d-flex flex-column gap-3 border rounded mx-auto bg-white p-2"
+            className="d-flex flex-column gap-3 border rounded mx-auto bg-white"
             style={{
               minWidth: "350px",
               flex: "1",
@@ -89,7 +89,9 @@ const AlmoxPage = () => {
               overflowX: "auto",
             }}
           >
-            <h5 className="text-center fw-bold">Novas</h5>
+            <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+              Novas
+            </h5>
             {allReq.isLoading ? (
               Array.from(Array(4)).map((_, i) => {
                 return <SkeletonCard key={i} />;
@@ -104,7 +106,7 @@ const AlmoxPage = () => {
           </div>
           {requestsToCancelReq && requestsToCancelReq.length > 0 && (
             <div
-              className=" d-flex flex-column gap-3 border rounded mx-auto bg-white p-2"
+              className="d-flex flex-column gap-3 border rounded mx-auto bg-white"
               style={{
                 minWidth: "350px",
                 flex: "1",
@@ -112,7 +114,9 @@ const AlmoxPage = () => {
                 overflowX: "auto",
               }}
             >
-              <h5 className="text-center fw-bold">Aguardando Cancelamento</h5>
+              <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+                Aguardando Cancelamento
+              </h5>
               {allReq.isLoading
                 ? Array.from(Array(4)).map((_, i) => {
                     return <SkeletonCard key={i} />;
@@ -123,7 +127,7 @@ const AlmoxPage = () => {
             </div>
           )}
           <div
-            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white"
             style={{
               minWidth: "350px",
               flex: "1",
@@ -131,7 +135,9 @@ const AlmoxPage = () => {
               overflowX: "auto",
             }}
           >
-            <h5 className="text-center fw-bold">Em Separação</h5>
+            <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+              Em Separação
+            </h5>
 
             {allReq.isLoading ? (
               Array.from(Array(4)).map((_, i) => {
@@ -148,7 +154,7 @@ const AlmoxPage = () => {
             )}
           </div>
           <div
-            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white"
             style={{
               minWidth: "350px",
               flex: "1",
@@ -156,7 +162,9 @@ const AlmoxPage = () => {
               overflowX: "auto",
             }}
           >
-            <h5 className="text-center fw-bold">Aguardando Coleta</h5>
+            <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+              Aguardando Coleta
+            </h5>
 
             {allReq.isLoading ? (
               Array.from(Array(4)).map((_, i) => {
@@ -173,7 +181,7 @@ const AlmoxPage = () => {
             )}
           </div>
           <div
-            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+            className=" d-flex flex-column margin-auto gap-3 border rounded bg-white "
             style={{
               minWidth: "350px",
               flex: "1",
@@ -181,7 +189,10 @@ const AlmoxPage = () => {
               overflowX: "auto",
             }}
           >
-            <h5 className="text-center fw-bold">Coletadas</h5>
+            <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+              Coletadas
+            </h5>
+
             {allReq.isLoading ? (
               Array.from(Array(4)).map((_, i) => {
                 return <SkeletonCard key={i} />;
@@ -199,7 +210,7 @@ const AlmoxPage = () => {
 
           {canceledReq && canceledReq.length > 0 && (
             <div
-              className=" d-flex flex-column margin-auto gap-3 border rounded bg-white p-2"
+              className=" d-flex flex-column margin-auto gap-3 border rounded bg-white"
               style={{
                 minWidth: "350px",
                 flex: "1",
@@ -207,7 +218,9 @@ const AlmoxPage = () => {
                 overflowX: "auto",
               }}
             >
-              <h5 className="text-center fw-bold">Solicitações Canceladas</h5>
+              <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+                Solicitações Canceladas
+              </h5>
               {allReq.isLoading
                 ? Array.from(Array(4)).map((_, i) => {
                     return <SkeletonCard key={i} />;
