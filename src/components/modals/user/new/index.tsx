@@ -11,6 +11,7 @@ import {
 } from "../../../../hooks/useAdminCommands";
 import { FaSave } from "react-icons/fa";
 import { TiCancel } from "react-icons/ti";
+import { toast } from "react-toastify";
 
 type MutationError = {
   name: { msg: string };
@@ -50,8 +51,13 @@ const NewUserModal = ({ show, handleClose }: Props) => {
     MutationError,
     NewUserCredentials
   >(["newUser"], createUser, {
-    onSuccess: () =>
-      Promise.all([query.invalidateQueries("users"), cleanCredentials()]),
+    onSuccess: (data) =>
+      Promise.all([
+        query.invalidateQueries("users"),
+        cleanCredentials(),
+        handleClose(),
+        toast.success(data),
+      ]),
   });
 
   function cleanCredentials() {

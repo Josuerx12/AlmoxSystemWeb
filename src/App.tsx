@@ -8,6 +8,10 @@ import Cookies from "js-cookie";
 import UsersAdminPanel from "./pages/admin/users";
 import { RequestsPage } from "./pages/requests";
 import { AlmoxPage } from "./pages/Almox";
+import { NotifyOrderTrackinAlmox } from "./pages/notifyOrderTrackingAlmox";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce, ToastContainer } from "react-toastify";
+import UserNotifyOrderPage from "./pages/userNotifyOrder";
 
 const App = () => {
   const { user, getUser } = useAuth();
@@ -20,6 +24,19 @@ const App = () => {
   return (
     <div className="app">
       <Header />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       <Routes>
         <Route path="/admin/users" element={<UsersAdminPanel />} />
         <Route
@@ -33,9 +50,24 @@ const App = () => {
           element={user ? <RequestsPage /> : <Navigate to="/login" />}
         />
         <Route
+          path="/user/notifies"
+          element={user ? <UserNotifyOrderPage /> : <Navigate to="/login" />}
+        />
+        <Route
           path="/almox/dashboard"
           element={user?.almox ? <AlmoxPage /> : <Navigate to="/requests" />}
         />
+        <Route
+          path="/almox/orders/dashboard"
+          element={
+            user?.almox ? (
+              <NotifyOrderTrackinAlmox />
+            ) : (
+              <Navigate to="/requests" />
+            )
+          }
+        />
+
         <Route
           path="/login"
           element={user ? <Navigate to="/requests" /> : <Login />}

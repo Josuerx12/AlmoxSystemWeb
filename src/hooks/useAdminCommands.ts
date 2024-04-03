@@ -2,6 +2,7 @@
 /* eslint-disable no-useless-catch */
 import { api } from "../config/api";
 import Cookies from "js-cookie";
+import { User } from "../interfaces/user";
 
 export type NewUserCredentials = {
   name: string;
@@ -30,14 +31,14 @@ export type UserEditCredentials = {
 export const useAdminCommands = () => {
   const token = Cookies.get("refreshToken");
 
-  const fetchUser = async () => {
+  const fetchUser = async (): Promise<User[]> => {
     try {
       const res = await api(token).get("/admin/users");
-      const users = await res.data.payload;
+      const users = res.data.payload;
 
       return users;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      throw error.response.data.errors;
     }
   };
 
@@ -58,16 +59,10 @@ export const useAdminCommands = () => {
       throw error.message;
     }
   };
-  const editUser = async ({
-    id,
-    data,
-  }: {
-    id: string;
-    data: UserEditCredentials;
-  }) => {
+  const editUser = async ({ id, data }: { id: string; data: FormData }) => {
     try {
       await api(token).put(`/admin/editUser/${id}`, data);
-      return "Usuário deletado com sucesso!";
+      return "Usuário editado com sucesso!";
     } catch (error: any) {
       throw error.response.data.errors;
     }

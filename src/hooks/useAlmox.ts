@@ -2,6 +2,7 @@
 /* eslint-disable no-useless-catch */
 import { api } from "../config/api";
 import Cookies from "js-cookie";
+import { IOrderTracking } from "../interfaces/ordertTraking";
 
 export const useAlmox = () => {
   const token = Cookies.get("refreshToken");
@@ -45,5 +46,48 @@ export const useAlmox = () => {
     }
   }
 
-  return { fetchAllRequests, awaitingCollection, startSeparation, collected };
+  async function fetchAllOrders(): Promise<IOrderTracking[]> {
+    try {
+      const allOrders = (await api(token).get("/orderTracking/")).data.payload;
+
+      return allOrders;
+    } catch (error: any) {
+      throw error.response.data.errors;
+    }
+  }
+
+  async function createNewOrder(formData: FormData): Promise<string> {
+    try {
+      const payload = (await api(token).post("/orderTracking/", formData)).data
+        .payload;
+
+      return payload;
+    } catch (error: any) {
+      throw error.response.data.errors;
+    }
+  }
+  async function deliverOrder(id: string): Promise<string> {
+    try {
+      const credentials = {
+        collected: true,
+      };
+
+      (await api(token).patch("/orderTracking/" + id, credentials)).data
+        .payload;
+
+      return "Entrega realizada com sucesso!";
+    } catch (error: any) {
+      throw error.response.data.errors;
+    }
+  }
+
+  return {
+    fetchAllRequests,
+    fetchAllOrders,
+    awaitingCollection,
+    startSeparation,
+    collected,
+    createNewOrder,
+    deliverOrder,
+  };
 };

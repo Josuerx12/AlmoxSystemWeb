@@ -7,10 +7,8 @@ import { FaRegTrashAlt, FaPen, FaSave } from "react-icons/fa";
 import { TiCancel } from "react-icons/ti";
 import DeleteUserConfirmation from "../../confirmations/deleteUser";
 import { useMutation, useQueryClient } from "react-query";
-import {
-  UserEditCredentials,
-  useAdminCommands,
-} from "../../../../hooks/useAdminCommands";
+import { useAdminCommands } from "../../../../hooks/useAdminCommands";
+import { toast } from "react-toastify";
 
 type Props = {
   user: User;
@@ -20,7 +18,7 @@ type Props = {
 
 type DataMutationProps = {
   id: string;
-  data: UserEditCredentials;
+  data: FormData;
 };
 type ErrorMutationProps = {
   name: { msg: string };
@@ -44,11 +42,12 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
     ErrorMutationProps,
     DataMutationProps
   >(["editUser"], editUser, {
-    onSuccess: () =>
+    onSuccess: (data) =>
       Promise.all([
         resetData(),
         handleClose(),
         query.invalidateQueries("users"),
+        toast.success(data),
       ]),
   });
 
@@ -74,7 +73,6 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
     setValue("password", undefined);
     setValue("confirmPassword", undefined);
     setValue("almox", user.almox);
-    setValue("almox", user.almox);
     setValue("admin", user.admin);
     setValue("requester", user.requester);
     reset();
@@ -88,7 +86,34 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
   const ref = useRef<HTMLFormElement | null>(null);
 
   async function submitEdit(data: any) {
-    await mutateAsync({ id: user._id, data });
+    const credentials = new FormData();
+
+    console.log(data);
+
+    if (data.name && data.name !== user.name) {
+      credentials.append("name", data.name);
+    }
+    if (data.email && data.email !== user.email) {
+      credentials.append("email", data.email);
+    }
+    if (data.login && data.login !== user.login) {
+      credentials.append("login", data.login);
+    }
+    if (data.phone && data.phone !== user.phone) {
+      credentials.append("phone", data.phone);
+    }
+    if (data.password && data.password.length > 0) {
+      credentials.append("password", data.password);
+    }
+    if (data.confirmPassword && data.confirmPassword.length > 0) {
+      credentials.append("confirmPassword", data.confirmPassword);
+    }
+
+    credentials.append("almox", data.almox);
+    credentials.append("admin", data.admin);
+    credentials.append("requester", data.requester);
+
+    await mutateAsync({ id: user._id, data: credentials });
   }
 
   return (

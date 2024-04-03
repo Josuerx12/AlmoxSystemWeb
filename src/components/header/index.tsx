@@ -5,30 +5,35 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { RiShieldUserFill, RiLogoutBoxRLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaUsers } from "react-icons/fa";
+import { FaBoxes, FaPlus, FaUsers } from "react-icons/fa";
 import { IoGitPullRequestSharp } from "react-icons/io5";
 import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import NewRequest from "../modals/requests/new";
 import { useQuery, useQueryClient } from "react-query";
 import { useRequests } from "../../hooks/useRequests";
 import { RequestType } from "../cards/newRequests";
 import { useFilter } from "../../hooks/useFilter";
-import { useAlmox } from "../../hooks/useAlmox";
+import { LuLogOut } from "react-icons/lu";
+import { IOrderTracking } from "../../interfaces/ordertTraking";
+import { useOrders } from "../../hooks/useOrders";
 
 const Header = () => {
   const { user, logoutUser } = useAuth();
+  const { userOrders } = useOrders();
   const navigate = useNavigate();
   const { fetch } = useRequests();
-  const { fetchAllRequests } = useAlmox();
   const requests = useQuery<RequestType[]>(["userRequests"], fetch);
+  const ordersNotify = useQuery<IOrderTracking[]>("userOrders", userOrders);
+
+  const newOrdersNotify = useMemo(
+    () => ordersNotify.data?.filter((i) => !i.collected),
+    [ordersNotify.data]
+  );
 
   const [isRequesting, setIsRequesting] = useState(false);
 
-  const allReq = useQuery<RequestType[]>(["allRequests"], fetchAllRequests);
-
   const { newReq: userNewReq } = useFilter(requests.data);
-  const { newReq: almoxNewReq } = useFilter(allReq.data);
 
   function handleNavigate(e: React.FormEvent, path: string) {
     e.preventDefault();
@@ -92,13 +97,22 @@ const Header = () => {
                   </NavDropdown>
                 )}
                 {user?.almox && (
-                  <Nav.Link
-                    onClick={(e) => handleNavigate(e, "/almox/dashboard")}
-                    className="requestsNotify"
-                    data-set={almoxNewReq ? almoxNewReq.length : 0}
-                  >
-                    Almoxarifado
-                  </Nav.Link>
+                  <NavDropdown title="Almoxarifado Gestão" menuVariant="dark">
+                    <NavDropdown.Item
+                      className="d-flex justify-content-between gap-3 align-items-center"
+                      onClick={(e) => handleNavigate(e, "/almox/dashboard")}
+                    >
+                      <LuLogOut /> Processos de Saídas
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      className="d-flex justify-content-between gap-3 align-items-center"
+                      onClick={(e) =>
+                        handleNavigate(e, "/almox/orders/dashboard")
+                      }
+                    >
+                      <FaBoxes /> Processos de Entregas
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 )}
                 {user?.requester && (
                   <>
@@ -108,6 +122,13 @@ const Header = () => {
                       data-set={userNewReq ? userNewReq.length : 0}
                     >
                       Solicitações
+                    </Nav.Link>
+                    <Nav.Link
+                      onClick={(e) => handleNavigate(e, "/user/notifies")}
+                      className="requestsNotify"
+                      data-set={newOrdersNotify ? newOrdersNotify.length : 0}
+                    >
+                      Compras
                     </Nav.Link>
                     <Nav.Link
                       onClick={(e) => {
