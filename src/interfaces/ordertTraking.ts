@@ -2,6 +2,7 @@ export interface IOrderTracking {
   id: string;
   idDeCompra: string;
   receptor: User;
+  state: number;
   owner: User;
   message: string;
   collected: boolean;

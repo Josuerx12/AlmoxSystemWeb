@@ -12,9 +12,17 @@ const UserNotifyOrderPage = () => {
   const { userOrders } = useOrders();
   const { data, isLoading } = useQuery("userOrders", userOrders);
 
-  const newOrders = useMemo(() => data?.filter((i) => !i.collected), [data]);
+  const newOrders = useMemo(() => data?.filter((i) => i.state == 0), [data]);
+  const quarentineOrders = useMemo(
+    () => data?.filter((i) => i.state == 2),
+    [data]
+  );
   const collectedOrders = useMemo(
-    () => data?.filter((i) => i.collected),
+    () => data?.filter((i) => i.state == 5 && i.collected),
+    [data]
+  );
+  const recicledOrders = useMemo(
+    () => data?.filter((i) => i.state == 4),
     [data]
   );
 
@@ -83,6 +91,34 @@ const UserNotifyOrderPage = () => {
           }}
         >
           <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+            Em Quarentena
+          </h5>
+          {isLoading ? (
+            Array.from(Array(4)).map((_, i) => {
+              return <SkeletonCard key={i} />;
+            })
+          ) : quarentineOrders && quarentineOrders.length > 0 ? (
+            quarentineOrders?.map((item) => (
+              <NotifyOrderCard key={item.id} orderTracking={item} />
+            ))
+          ) : (
+            <p className="text-center fw-bold text-secondary">
+              Nenhuma solicitação em quarentena!
+            </p>
+          )}
+        </div>
+
+        <div
+          className="d-flex flex-column gap-3 border rounded mx-auto bg-white"
+          style={{
+            minWidth: "350px",
+            flex: "1",
+            height: "70dvh",
+            overflowX: "auto",
+            paddingBottom: "1rem",
+          }}
+        >
+          <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
             Coletados
           </h5>
           {isLoading ? (
@@ -96,6 +132,33 @@ const UserNotifyOrderPage = () => {
           ) : (
             <p className="text-center fw-bold text-secondary">
               Nenhuma coleta realizada!
+            </p>
+          )}
+        </div>
+        <div
+          className="d-flex flex-column gap-3 border rounded mx-auto bg-white"
+          style={{
+            minWidth: "350px",
+            flex: "1",
+            height: "70dvh",
+            overflowX: "auto",
+            paddingBottom: "1rem",
+          }}
+        >
+          <h5 className="text-center fw-bold bg-light text-dark sticky-top p-2 shadow-sm">
+            Enviados para o estoque
+          </h5>
+          {isLoading ? (
+            Array.from(Array(4)).map((_, i) => {
+              return <SkeletonCard key={i} />;
+            })
+          ) : recicledOrders && recicledOrders.length > 0 ? (
+            recicledOrders?.map((item) => (
+              <NotifyOrderCard key={item.id} orderTracking={item} />
+            ))
+          ) : (
+            <p className="text-center fw-bold text-secondary">
+              Nenhuma requisição realizada!
             </p>
           )}
         </div>

@@ -70,6 +70,7 @@ export const useAlmox = () => {
     try {
       const credentials = {
         collected: true,
+        state: 5,
       };
 
       (await api(token).patch("/orderTracking/" + id, credentials)).data
