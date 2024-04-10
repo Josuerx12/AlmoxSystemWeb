@@ -2,11 +2,12 @@ import { useQuery, useQueryClient } from "react-query";
 import { useAlmox } from "../../hooks/useAlmox";
 import NotifyOrderCard from "../../components/cards/newNotifyOrder";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { LuRefreshCcw } from "react-icons/lu";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import CreateNewOrder from "../../components/modals/orders/create";
+import { useFilterOrders } from "../../hooks/useFilterOrders";
 
 const NotifyOrderTrackinAlmox = () => {
   const { fetchAllOrders } = useAlmox();
@@ -15,19 +16,9 @@ const NotifyOrderTrackinAlmox = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   const { data, isLoading } = useQuery("Orders", fetchAllOrders);
-  const newOrders = useMemo(() => data?.filter((i) => i.state == 0), [data]);
-  const quarentineOrders = useMemo(
-    () => data?.filter((i) => i.state == 2),
-    [data]
-  );
-  const collectedOrders = useMemo(
-    () => data?.filter((i) => i.state == 5 && i.collected),
-    [data]
-  );
-  const recicledOrders = useMemo(
-    () => data?.filter((i) => i.state == 4),
-    [data]
-  );
+
+  const { newOrders, recicledOrders, quarentineOrders, collectedOrders } =
+    useFilterOrders(data);
 
   return (
     <section className="m-3" style={{ flex: 1 }}>

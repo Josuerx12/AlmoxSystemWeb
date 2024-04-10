@@ -43,11 +43,12 @@ const CreateNewOrder = ({ show, handleClose }: Props) => {
     "createOrderNotify",
     createNewOrder,
     {
-      onSuccess: () => {
-        handleClose();
-        reset();
-        query.invalidateQueries("Orders");
-      },
+      onSuccess: () =>
+        Promise.all([
+          handleClose(),
+          reset(),
+          query.invalidateQueries("Orders"),
+        ]),
     }
   );
 

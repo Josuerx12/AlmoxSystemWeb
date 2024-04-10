@@ -3,29 +3,17 @@ import { FaFilter } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 import { useQuery, useQueryClient } from "react-query";
 import { useOrders } from "../../hooks/useOrders";
-import { useMemo } from "react";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
 import NotifyOrderCard from "../../components/cards/newNotifyOrder";
+import { useFilterOrders } from "../../hooks/useFilterOrders";
 
 const UserNotifyOrderPage = () => {
   const query = useQueryClient();
   const { userOrders } = useOrders();
   const { data, isLoading } = useQuery("userOrders", userOrders);
 
-  const newOrders = useMemo(() => data?.filter((i) => i.state == 0), [data]);
-  const quarentineOrders = useMemo(
-    () => data?.filter((i) => i.state == 2),
-    [data]
-  );
-  const collectedOrders = useMemo(
-    () => data?.filter((i) => i.state == 5 && i.collected),
-    [data]
-  );
-  const recicledOrders = useMemo(
-    () => data?.filter((i) => i.state == 4),
-    [data]
-  );
-
+  const { newOrders, recicledOrders, quarentineOrders, collectedOrders } =
+    useFilterOrders(data);
   return (
     <section className="m-3" style={{ flex: "1" }}>
       <h3 className="text-center fw-bold fs-2">
