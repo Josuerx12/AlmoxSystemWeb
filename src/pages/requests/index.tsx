@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import { FaFilter, FaPlus, FaWhatsapp } from "react-icons/fa";
+import { FaFilter, FaPlus } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 import NewRequest from "../../components/modals/requests/new";
 import { useState } from "react";
@@ -72,14 +72,6 @@ const RequestsPage = () => {
             className="d-flex gap-2 align-items-center justify-content-center btn-refresh"
           >
             <LuRefreshCcw />
-          </Button>
-          <Button
-            className="d-flex gap-2 align-items-center justify-content-center"
-            variant="outline-success"
-            title="Caso não esteja recebendo as mensagens por whatsapp clique aqui e responda!"
-            onClick={() => window.open("https://api.whatsapp.com/send/?phone=5521998208228&text=Quero+receber+notifica%C3%A7%C3%B5es+sobre+minhas+solicita%C3%A7%C3%B5es%21%21+&type=phone_number&app_absent=0", '_blank')}
-          >
-            <FaWhatsapp /> Acompanhar
           </Button>
           <Button
             onClick={() => setIsFiltering((prev) => !prev)}
