@@ -20,6 +20,7 @@ export type NewReqCredentials = {
 
 export type MutationError = {
   exitID: { msg: string };
+  collectorPhone: { msg: string };
   collectForecast: { msg: string };
   desc: { msg: string };
 };
@@ -29,6 +30,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       exitID: undefined,
+      collectorPhone: undefined,
       collectForecast: undefined,
       desc: undefined,
     },
@@ -52,6 +54,7 @@ const NewRequest = ({ show, handleClose }: Props) => {
 
   function cleanCredentials() {
     setValue("exitID", undefined);
+    setValue("collectorPhone", undefined);
     setValue("collectForecast", undefined);
     setValue("desc", undefined);
     reset();
@@ -77,10 +80,28 @@ const NewRequest = ({ show, handleClose }: Props) => {
         >
           <Form.Group>
             <Form.Label>ID de Saída</Form.Label>
-            <Form.Control type="number" {...register("exitID")} />
+            <Form.Control
+              type="number"
+              placeholder="224455"
+              {...register("exitID")}
+            />
             {error?.exitID && (
               <Form.Text className="text-danger fw-bold">
                 {error.exitID.msg}
+              </Form.Text>
+            )}
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Telefone do Coletor</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="22999123433"
+              {...register("collectorPhone")}
+            />
+            {error?.collectorPhone && (
+              <Form.Text className="text-danger fw-bold">
+                {error.collectorPhone.msg}
               </Form.Text>
             )}
           </Form.Group>
