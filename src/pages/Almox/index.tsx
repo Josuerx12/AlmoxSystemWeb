@@ -91,15 +91,20 @@ const AlmoxPage = () => {
               <b>Novas:</b> {newReq?.length}
             </p>
             <p>
+              <b>Em Separação:</b> {inSeparationReq?.length}
+            </p>
+            <p>
               <b>Aguardando Coleta:</b> {waitingToCollectReq?.length}
+            </p>
+            <p>
+              <b>Canceladas:</b> {canceledReq?.length}
             </p>
             <p>
               <b>Coletadas:</b> {collectedReq?.length}
             </p>
 
             <p>
-              <b>Total de Processos Baseados nos filtros:</b>{" "}
-              {filteredReqs?.length}
+              <b>Total Baseado nos filtros:</b> {filteredReqs?.length}
             </p>
           </div>
           <div className="d-flex gap-2 mb-3">
