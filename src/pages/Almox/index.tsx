@@ -91,7 +91,7 @@ const AlmoxPage = () => {
               <b>Novas:</b> {newReq?.length}
             </p>
             <p>
-              <b>Aguardando Coleta:</b> {newReq?.length}
+              <b>Aguardando Coleta:</b> {waitingToCollectReq?.length}
             </p>
             <p>
               <b>Coletadas:</b> {collectedReq?.length}
