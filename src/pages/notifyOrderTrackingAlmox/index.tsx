@@ -26,7 +26,7 @@ const NotifyOrderTrackinAlmox = () => {
         handleClose={() => setIsCreating(false)}
         show={isCreating}
       />
-      <h3 className="text-center fw-bold fs-2">Almoxarifado - Dashboard</h3>
+      <h3 className="text-center fw-bold fs-2">Processos de Compra</h3>
 
       <div className="d-flex justify-content-end gap-2 mb-3">
         <Button

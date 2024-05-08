@@ -25,7 +25,7 @@ const App = () => {
     <div className="app">
       <Header />
       <ToastContainer
-        position="top-right"
+        position="top-center"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -34,7 +34,7 @@ const App = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
         transition={Bounce}
       />
       <Routes>

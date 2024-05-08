@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import { FaFilter } from "react-icons/fa";
+import { FaFileExcel, FaFilter } from "react-icons/fa";
 import { LuRefreshCcw } from "react-icons/lu";
 import { useQuery, useQueryClient } from "react-query";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
@@ -15,6 +15,8 @@ import RequestFilters, {
   RequestFiltersProps,
 } from "../../components/filters/requestFilters";
 import WaitingToCancelReqCard from "../../components/cards/waitingToCancelReq";
+import { useGenerateXlsx } from "../../hooks/useGenerateXlsx";
+import { toast } from "react-toastify";
 
 const AlmoxPage = () => {
   const [filters, setFilters] = useState<RequestFiltersProps>({
@@ -28,6 +30,8 @@ const AlmoxPage = () => {
   const allReq = useQuery<RequestType[]>(["allRequests"], fetchAllRequests, {
     refetchInterval: 300000,
   });
+
+  const { generate, downloadXlsx } = useGenerateXlsx();
 
   const filteredReqs = allReq.data?.filter((req) => {
     return (
@@ -84,7 +88,7 @@ const AlmoxPage = () => {
         setFilters={setFilters}
       />
       <section className="m-3" style={{ flex: "1" }}>
-        <h3 className="text-center fw-bold fs-2">Almoxarifado - Dashboard</h3>
+        <h3 className="text-center fw-bold fs-2">Processos de Saída</h3>
         <div className="d-flex justify-content-between gap-2 mb-3">
           <div className="d-flex gap-2">
             <p>
@@ -114,6 +118,32 @@ const AlmoxPage = () => {
               className="d-flex gap-2 align-items-center justify-content-center btn-refresh"
             >
               <LuRefreshCcw />
+            </Button>
+            <Button
+              variant="success"
+              className="d-flex  gap-2 align-items-center justify-content-center"
+              onClick={() => {
+                generate(filteredReqs)
+                  .then((blob) => {
+                    downloadXlsx(
+                      blob,
+                      `Relatorio ${new Date(Date.now()).toLocaleString(
+                        "pt-BR"
+                      )}.xlsx`
+                    );
+                    toast.success(
+                      "Relatorio baseados nos filtros gerados com sucesso!"
+                    );
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                    toast.error(
+                      "Erro ao gerar relatorio tente novamente mais tarde!"
+                    );
+                  });
+              }}
+            >
+              <FaFileExcel /> Exportar Relatorio
             </Button>
             <Button
               variant="primary"
