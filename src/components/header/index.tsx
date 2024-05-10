@@ -6,7 +6,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { RiShieldUserFill, RiLogoutBoxRLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FaBoxes, FaPlus, FaUsers } from "react-icons/fa";
-import { IoGitPullRequestSharp } from "react-icons/io5";
+import { IoAnalytics, IoGitPullRequestSharp } from "react-icons/io5";
 import { useAuth } from "../../hooks/useAuth";
 import { useMemo, useState } from "react";
 import NewRequest from "../modals/requests/new";
@@ -111,6 +111,15 @@ const Header = () => {
                       }
                     >
                       <FaBoxes /> Processos de Entregas
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item
+                      className="d-flex justify-content-between gap-3 align-items-center"
+                      onClick={(e) =>
+                        handleNavigate(e, "/almox/dashboard/solicitacoes")
+                      }
+                    >
+                      <IoAnalytics /> Dashboard Processos de Saída
                     </NavDropdown.Item>
                   </NavDropdown>
                 )}

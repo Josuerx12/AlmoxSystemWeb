@@ -12,6 +12,7 @@ import { NotifyOrderTrackinAlmox } from "./pages/notifyOrderTrackingAlmox";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import UserNotifyOrderPage from "./pages/userNotifyOrder";
+import RequestsDashboard from "./pages/dashboards/Requests";
 
 const App = () => {
   const { user, getUser } = useAuth();
@@ -56,6 +57,12 @@ const App = () => {
         <Route
           path="/almox/dashboard"
           element={user?.almox ? <AlmoxPage /> : <Navigate to="/requests" />}
+        />
+        <Route
+          path="/almox/dashboard/solicitacoes"
+          element={
+            user?.almox ? <RequestsDashboard /> : <Navigate to="/requests" />
+          }
         />
         <Route
           path="/almox/orders/dashboard"
