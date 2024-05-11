@@ -89,28 +89,7 @@ const AlmoxPage = () => {
       />
       <section className="m-3" style={{ flex: "1" }}>
         <h3 className="text-center fw-bold fs-2">Processos de Saída</h3>
-        <div className="d-flex justify-content-between gap-2 mb-3">
-          <div className="d-flex gap-2">
-            <p>
-              <b>Novas:</b> {newReq?.length}
-            </p>
-            <p>
-              <b>Em Separação:</b> {inSeparationReq?.length}
-            </p>
-            <p>
-              <b>Aguardando Coleta:</b> {waitingToCollectReq?.length}
-            </p>
-            <p>
-              <b>Canceladas:</b> {canceledReq?.length}
-            </p>
-            <p>
-              <b>Coletadas:</b> {collectedReq?.length}
-            </p>
-
-            <p>
-              <b>Total Baseado nos filtros:</b> {filteredReqs?.length}
-            </p>
-          </div>
+        <div className="d-flex justify-content-between gap-2 mb-3"
           <div className="d-flex gap-2 mb-3">
             <Button
               variant="dark"
