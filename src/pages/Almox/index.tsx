@@ -90,7 +90,7 @@ const AlmoxPage = () => {
       <section className="m-3" style={{ flex: "1" }}>
         <h3 className="text-center fw-bold fs-2">Processos de Saída</h3>
 
-        <div className="d-flex justify-content-end w-100 gap-2 mb-3">
+        <div className="d-flex justify-content-end gap-2 mb-3">
           <Button
             variant="dark"
             onClick={() => query.resetQueries("allRequests")}
