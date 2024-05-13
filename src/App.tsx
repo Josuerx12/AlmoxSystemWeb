@@ -13,6 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import UserNotifyOrderPage from "./pages/userNotifyOrder";
 import RequestsDashboard from "./pages/dashboards/Requests";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
   const { user, getUser } = useAuth();
