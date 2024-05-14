@@ -10,21 +10,23 @@ import Slider from "react-slick";
 import {
   Chart as ChartJS,
   CategoryScale,
-  LinearScale,
+  Colors,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
+  BarElement,
+  LinearScale,
 } from "chart.js";
 
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
-  LinearScale,
+  Colors,
   PointElement,
-  LineElement,
+  BarElement,
+  LinearScale,
   Title,
   Tooltip,
   Legend
@@ -74,8 +76,10 @@ const RequestsDashboard = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 4,
+    autoplaySpeed: 4000,
     slidesToScroll: 1,
     initialSlide: 0,
+    autoplay: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -104,16 +108,16 @@ const RequestsDashboard = () => {
     ],
   };
 
-  const labels = data?.requestsByMonth.map((req) => months[req._id]);
-  const dataSets = data?.requestsByMonth
-    .sort((a, b) => a._id - b._id)
-    .map((req) => req.totalRequests);
+  const labels = data?.requestsByMonth.map((req) => months[req._id - 1]);
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "top" as const,
+      },
+      colors: {
+        enabled: true,
       },
       title: {
         display: true,
@@ -273,7 +277,7 @@ const RequestsDashboard = () => {
         </div>
 
         <div className="d-flex gap-4 justify-content-between">
-          <Line
+          <Bar
             className="w-100 h-100"
             style={{ maxWidth: "350px", maxHeight: "300px" }}
             options={options}
@@ -283,9 +287,15 @@ const RequestsDashboard = () => {
               datasets: [
                 {
                   label: "Total de solicitações",
-                  data: dataSets,
-                  borderColor: "rgb(255, 99, 132)",
-                  backgroundColor: "rgba(255, 99, 132, 0.5)",
+                  data: data?.requestsByMonth
+                    .sort((a, b) => a._id - b._id)
+                    .map((req) => req.totalRequests),
+                },
+                {
+                  label: "Total Atendidas",
+                  data: data?.collectedRequestsByMonth
+                    .sort((a, b) => a._id - b._id)
+                    .map((req) => req.totalRequests),
                 },
               ],
             }}

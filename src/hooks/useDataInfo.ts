@@ -15,6 +15,7 @@ export type RequestByMonth = {
 export interface IRequestDataInfo {
   requestsByPeriod: RequestType[];
   requestsByMonth: RequestByMonth[];
+  collectedRequestsByMonth: RequestByMonth[];
   emSeparacao: RequestType[];
   coletado: RequestType[];
   cancelada: RequestType[];

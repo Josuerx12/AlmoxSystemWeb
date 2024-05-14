@@ -2,12 +2,13 @@ import { useQuery, useQueryClient } from "react-query";
 import { useAlmox } from "../../hooks/useAlmox";
 import NotifyOrderCard from "../../components/cards/newNotifyOrder";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
-import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { FormEvent, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import { LuRefreshCcw } from "react-icons/lu";
-import { FaFilter, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import CreateNewOrder from "../../components/modals/orders/create";
 import { useFilterOrders } from "../../hooks/useFilterOrders";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 const NotifyOrderTrackinAlmox = () => {
   const { fetchAllOrders } = useAlmox();
@@ -17,8 +18,20 @@ const NotifyOrderTrackinAlmox = () => {
 
   const { data, isLoading } = useQuery("Orders", fetchAllOrders);
 
+  const [filterExitId, setFilterExitId] = useState("");
+
+  const [filteredData, setFilteredData] = useState(data);
+
+  function handleSubmitFilters(e: FormEvent) {
+    e.preventDefault();
+
+    setFilteredData(() =>
+      data?.filter((order) => order.idDeCompra.includes(filterExitId))
+    );
+  }
+
   const { newOrders, recicledOrders, quarentineOrders, collectedOrders } =
-    useFilterOrders(data);
+    useFilterOrders(filteredData);
 
   return (
     <section className="m-3" style={{ flex: 1 }}>
@@ -28,22 +41,41 @@ const NotifyOrderTrackinAlmox = () => {
       />
       <h3 className="text-center fw-bold fs-2">Processos de Compra</h3>
 
-      <div className="d-flex justify-content-end gap-2 mb-3">
+      <div className="d-flex flex-wrap justify-content-end align-items-end gap-2 mb-3">
+        <div>
+          <Form onSubmit={handleSubmitFilters}>
+            <Form.Group>
+              <Form.Label>Buscar por ID</Form.Label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Control
+                  style={{ height: "40px" }}
+                  onChange={(e) => setFilterExitId(e.target.value)}
+                  disabled={isLoading}
+                  type="text"
+                />
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  style={{ height: "40px" }}
+                  className="d-flex align-items-center gap-1"
+                >
+                  Buscar <FaMagnifyingGlass />
+                </Button>
+              </div>
+            </Form.Group>
+          </Form>
+        </div>
+
         <Button
           variant="dark"
+          style={{ height: "40px" }}
           onClick={() => query.resetQueries("Orders")}
           className="d-flex gap-2 align-items-center justify-content-center btn-refresh"
         >
           <LuRefreshCcw />
         </Button>
-
         <Button
-          variant="primary"
-          className="d-flex gap-2 align-items-center justify-content-center"
-        >
-          <FaFilter /> Filtrar
-        </Button>
-        <Button
+          style={{ height: "40px" }}
           onClick={() => setIsCreating(true)}
           variant="success"
           className="d-flex gap-2 align-items-center justify-content-center"
