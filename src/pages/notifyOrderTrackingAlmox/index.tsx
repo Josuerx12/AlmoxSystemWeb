@@ -2,13 +2,14 @@ import { useQuery, useQueryClient } from "react-query";
 import { useAlmox } from "../../hooks/useAlmox";
 import NotifyOrderCard from "../../components/cards/newNotifyOrder";
 import { SkeletonCard } from "../../components/skelletons/card/styles";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { LuRefreshCcw } from "react-icons/lu";
 import { FaPlus } from "react-icons/fa";
 import CreateNewOrder from "../../components/modals/orders/create";
 import { useFilterOrders } from "../../hooks/useFilterOrders";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import { IOrderTracking } from "../../interfaces/ordertTraking";
 
 const NotifyOrderTrackinAlmox = () => {
   const { fetchAllOrders } = useAlmox();
@@ -20,7 +21,11 @@ const NotifyOrderTrackinAlmox = () => {
 
   const [filterExitId, setFilterExitId] = useState("");
 
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState<IOrderTracking[]>();
+
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   function handleSubmitFilters(e: FormEvent) {
     e.preventDefault();
@@ -32,6 +37,8 @@ const NotifyOrderTrackinAlmox = () => {
 
   const { newOrders, recicledOrders, quarentineOrders, collectedOrders } =
     useFilterOrders(filteredData);
+
+  console.log(filteredData);
 
   return (
     <section className="m-3" style={{ flex: 1 }}>

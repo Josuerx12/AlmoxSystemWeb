@@ -78,7 +78,7 @@ const OrdersNotificationDetails = ({ show, handleClose, order }: Props) => {
             )}
           </Form>
         </Modal.Body>
-        {(user?.almox || user?.admin) && (
+        {(user?.almox || user?.admin) && order.state !== 5 && (
           <Modal.Footer>
             <Button
               onClick={() => setIsDelivering((prev) => !prev)}

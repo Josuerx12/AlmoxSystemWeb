@@ -3,6 +3,7 @@ import { IOrderTracking } from "../../../../interfaces/ordertTraking";
 import { useMutation, useQueryClient } from "react-query";
 import { FaCheckCircle, FaExclamation } from "react-icons/fa";
 import { useAlmox } from "../../../../hooks/useAlmox";
+import { toast } from "react-toastify";
 
 type Props = {
   show: boolean;
@@ -15,7 +16,9 @@ const DeliverOrder = ({ show, handleClose, order }: Props) => {
   const query = useQueryClient();
   const { isLoading, mutateAsync } = useMutation("editNotify", deliverOrder, {
     onSuccess: () => {
-      query.invalidateQueries("Orders"), handleClose();
+      query.invalidateQueries("Orders"),
+        handleClose(),
+        toast.success("Entrega realizada com sucesso!");
     },
   });
 
