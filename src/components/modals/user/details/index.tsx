@@ -89,8 +89,6 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
   async function submitEdit(data: any) {
     const credentials = new FormData();
 
-    console.log(data);
-
     if (data.name && data.name !== user.name) {
       credentials.append("name", data.name);
     }
