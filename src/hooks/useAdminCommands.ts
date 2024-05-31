@@ -61,7 +61,7 @@ export const useAdminCommands = () => {
   };
   const editUser = async ({ id, data }: { id: string; data: FormData }) => {
     try {
-      await api(token).put(`/admin/editUser/${id}`, data);
+      await api(token).put(`/auth/editUser/${id}`, data);
       return "Usuário editado com sucesso!";
     } catch (error: any) {
       throw error.response.data.errors;
