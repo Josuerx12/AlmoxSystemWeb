@@ -48,6 +48,7 @@ const UserDetails = ({ user, show, handleClose }: Props) => {
         handleClose(),
         query.invalidateQueries("users"),
         toast.success(data),
+        setIsEditing(false),
       ]),
   });
 
