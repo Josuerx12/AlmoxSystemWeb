@@ -56,7 +56,12 @@ const App = () => {
         transition={Bounce}
       />
       <Routes>
-        <Route path="/admin/users" element={<UsersAdminPanel />} />
+        <Route
+          path="/admin/users"
+          element={
+            user?.admin ? <UsersAdminPanel /> : <Navigate to="/requests" />
+          }
+        />
         <Route
           path="/"
           element={
