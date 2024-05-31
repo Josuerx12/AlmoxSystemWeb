@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-useless-catch */
 import { api } from "../config/api";
-import Cookies from "js-cookie";
 import { IOrderTracking } from "../interfaces/ordertTraking";
 
 export const useAlmox = () => {
-  const token = Cookies.get("refreshToken");
-
   async function fetchAllRequests() {
     try {
-      const res = await api(token).get("/requests/all");
+      const res = await api.get("/requests/all");
       return res.data.payload;
     } catch (error: any) {
       throw error.message;
@@ -18,7 +15,7 @@ export const useAlmox = () => {
 
   async function startSeparation(id: string) {
     try {
-      await api(token).put(`/requests/inSeparation/${id}`);
+      await api.put(`/requests/inSeparation/${id}`);
     } catch (error: any) {
       throw error.message;
     }
@@ -26,7 +23,7 @@ export const useAlmox = () => {
 
   async function awaitingCollection(id: string) {
     try {
-      await api(token).put(`/requests/separated/${id}`);
+      await api.put(`/requests/separated/${id}`);
     } catch (error: any) {
       throw error.message;
     }
@@ -40,7 +37,7 @@ export const useAlmox = () => {
     collectorCredentials: { name: string; document: string };
   }) {
     try {
-      await api(token).post(`/requests/collected/${id}`, collectorCredentials);
+      await api.post(`/requests/collected/${id}`, collectorCredentials);
     } catch (error: any) {
       throw error.response.data.errors;
     }
@@ -48,7 +45,7 @@ export const useAlmox = () => {
 
   async function fetchAllOrders(): Promise<IOrderTracking[]> {
     try {
-      const allOrders = (await api(token).get("/orderTracking/")).data.payload;
+      const allOrders = (await api.get("/orderTracking/")).data.payload;
 
       return allOrders;
     } catch (error: any) {
@@ -58,7 +55,7 @@ export const useAlmox = () => {
 
   async function createNewOrder(formData: FormData): Promise<string> {
     try {
-      const payload = (await api(token).post("/orderTracking/", formData)).data
+      const payload = (await api.post("/orderTracking/", formData)).data
         .payload;
 
       return payload;
@@ -73,8 +70,7 @@ export const useAlmox = () => {
         state: 5,
       };
 
-      (await api(token).patch("/orderTracking/" + id, credentials)).data
-        .payload;
+      (await api.patch("/orderTracking/" + id, credentials)).data.payload;
 
       return "Entrega realizada com sucesso!";
     } catch (error: any) {

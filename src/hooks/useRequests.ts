@@ -2,14 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewReqCredentials } from "../components/modals/requests/new";
 import { api } from "../config/api";
-import Cookies from "js-cookie";
 
 export const useRequests = () => {
-  const token = Cookies.get("refreshToken");
-
   async function fetch() {
     try {
-      const res = await api(token).get("/user/requests");
+      const res = await api.get("/user/requests");
       const data = await res.data.payload;
 
       return data;
@@ -20,7 +17,7 @@ export const useRequests = () => {
 
   async function newReq(data: NewReqCredentials) {
     try {
-      const res = await api(token).post("/requests/new", data);
+      const res = await api.post("/requests/new", data);
       return res;
     } catch (error: any) {
       throw error.response.data.errors;
@@ -35,7 +32,7 @@ export const useRequests = () => {
     reason: string;
   }) {
     try {
-      const res = await api(token).put(`/requests/requestCancel/${id}`, reason);
+      const res = await api.put(`/requests/requestCancel/${id}`, reason);
       return res;
     } catch (error: any) {
       throw error.response.data.errors;
@@ -43,7 +40,7 @@ export const useRequests = () => {
   }
   async function cancelReq(id: string) {
     try {
-      const res = await api(token).put(`/requests/cancel/${id}`);
+      const res = await api.put(`/requests/cancel/${id}`);
       return res;
     } catch (error: any) {
       throw error.response.data.errors;
@@ -51,7 +48,7 @@ export const useRequests = () => {
   }
   async function deleteReq(id: string) {
     try {
-      const res = await api(token).delete(`/requests/${id}`);
+      const res = await api.delete(`/requests/${id}`);
       return res;
     } catch (error: any) {
       throw error;

@@ -38,12 +38,14 @@ type Actions = {
 export const useAuth = create<State & Actions>((set) => ({
   user: null,
   errors: null,
+  isLoadingUser: true,
   login: async (credentials: Credentials) => {
     try {
-      const res = await api().post("/auth/login", credentials);
+      const res = await api.post("/auth/login", credentials);
       const token = await res.data.token;
 
       Cookies.set("refreshToken", token, { expires: 1 });
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       set(() => ({ errors: error.response.data.errors }));
@@ -51,15 +53,15 @@ export const useAuth = create<State & Actions>((set) => ({
   },
   logoutUser: () => {
     Cookies.remove("refreshToken");
+    api.defaults.headers.common.Authorization = "";
     set(() => ({ user: null }));
   },
   getUser: async () => {
-    const token = Cookies.get("refreshToken");
     try {
-      const res = await api(token).get("/auth/user");
+      const res = await api.get("/auth/user");
       const user = await res.data;
 
-      set(() => ({ user: user, errors: null }));
+      set(() => ({ user: user, errors: null, isLoadingUser: false }));
     } catch (error) {
       console.error(error);
     }

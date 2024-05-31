@@ -3,7 +3,7 @@ import Footer from "./components/footer";
 import Header from "./components/header";
 import Login from "./pages/login";
 import { useAuth } from "./hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import UsersAdminPanel from "./pages/admin/users";
 import { RequestsPage } from "./pages/requests";
@@ -15,15 +15,30 @@ import UserNotifyOrderPage from "./pages/userNotifyOrder";
 import RequestsDashboard from "./pages/dashboards/Requests";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { api } from "./config/api";
+import LoadingPage from "./pages/loadingPage";
 
 const App = () => {
   const { user, getUser } = useAuth();
   const token = Cookies.get("refreshToken");
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
   useEffect(() => {
-    if (token) {
-      getUser();
-    }
+    const loadUserFromToken = async () => {
+      if (token) {
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
+        await getUser();
+        setIsLoadingUser(false);
+      }
+      setIsLoadingUser(false);
+    };
+    loadUserFromToken();
   }, [token]);
+
+  if (isLoadingUser) {
+    return <LoadingPage />;
+  }
+
   return (
     <div className="app">
       <Header />

@@ -1,6 +1,5 @@
 import { RequestType } from "../components/cards/newRequests";
 import { api } from "../config/api";
-import Cookies from "js-cookie";
 
 export type PeriodOfDataRequests = {
   startAt: string;
@@ -26,13 +25,11 @@ export interface IRequestDataInfo {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function useDataInfo() {
-  const token = Cookies.get("refreshToken");
-
   async function fetchRequestsData(
     period: PeriodOfDataRequests
   ): Promise<IRequestDataInfo> {
     try {
-      const res = await api(token).post("/requests/dataInfo", period);
+      const res = await api.post("/requests/dataInfo", period);
 
       return res.data.payload;
     } catch (error: any) {
